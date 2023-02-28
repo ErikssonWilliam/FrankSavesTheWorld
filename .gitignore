@@ -1,0 +1,7 @@
+.metadata
+.project
+*.class
+/bin/
+.settings
+.classpath
+/javaFx/
