@@ -1,50 +1,34 @@
 package myLogics;
 
-import javafx.scene.Scene;
+
+import java.io.FileNotFoundException;
+
 import javafx.scene.layout.HBox;
-import javafx.stage.Stage;
+
 import myGraphics.Logo;
 
 public class MainMenu extends HBox{
 
-	private Stage stage;
-	private Boolean ifFirst = true;
-	private Scene mainMenu;
-
-
-	public MainMenu(Stage arg0) {
-		this.stage = arg0;
-	}
-	
-	
-	public void run() {
+	public MainMenu(Model model) {
 		
-	try {
-		Logo logo = new Logo();
-		this.getChildren().add(logo);
-	} catch (Exception FileNotFoundException) {
-	}
+		try {
+			Logo logo = new Logo();
+			this.getChildren().add(logo);
+		} catch (Exception FileNotFoundException) {
+		}
+		Options options;
+		try {
+			options = new Options(model);
+			this.getChildren().add(options);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+
 	
-	Options options = new Options(this);
-	this.getChildren().add(options);
-	
-	if (ifFirst) {
-	mainMenu = new Scene(this);
-	ifFirst = false;
-	}
-	
-	stage.setTitle("Frank...Saves The World");
-	stage.setScene(mainMenu);
-    stage.show();
-	}
-
-
-	public Stage getStage() {
-		return stage;
-	}
-
-
-	public void setStage(Stage stage) {
-		this.stage = stage;
+//	if (ifFirst) {
+//	mainMenu = new Scene(this);
+//	ifFirst = false;
 	}
 }

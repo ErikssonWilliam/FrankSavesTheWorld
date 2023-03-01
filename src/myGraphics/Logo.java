@@ -14,10 +14,8 @@ public class Logo extends Canvas{
 		setHeight(1000);
 		setWidth(1000);
 		
-		String logoPath = "/home/wiler441/Desktop/pika.png";
+		String logoPath = "/home/wiler441/Documents/Frank_Pictures/logo.png";
 		Image logo = new Image(new FileInputStream(logoPath));
 		getGraphicsContext2D().drawImage(logo, 0, 0, getWidth(), getHeight());
-		System.out.println("hej");
-
 	}
 }
