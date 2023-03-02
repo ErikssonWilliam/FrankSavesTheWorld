@@ -18,7 +18,7 @@ public class Main extends Application{
 	public void start(Stage arg0) throws Exception {
 		arg0.setTitle("Frank...Saves The World");
 		arg0.setHeight(1000);
-		arg0.setWidth(1500);
+		arg0.setWidth(1520);
 		Model model = new Model(arg0);
 		Frame frame = new Frame(model);
 	

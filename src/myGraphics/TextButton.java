@@ -8,8 +8,8 @@ import myLogics.Model;
 public class TextButton extends Canvas{
 	
 	public TextButton (Model model) {
-	setHeight(200);
-	setWidth(500);
+	setHeight(150);
+	setWidth(400);
 	
 	
 	}

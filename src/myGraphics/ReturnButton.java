@@ -22,7 +22,7 @@ public class ReturnButton extends TextButton{
 		super(model);
 
 		Image button = new Image(new FileInputStream("/home/wiler441/Documents/Frank_Pictures/returnbutton.png"));
-		getGraphicsContext2D().drawImage(button, 5, 0, getWidth(), getHeight());
+		getGraphicsContext2D().drawImage(button, 0, 0, getWidth(), getHeight());
 		
 		setOnMouseClicked(event -> {
 			mainMenu = new stateMainMenu(model);

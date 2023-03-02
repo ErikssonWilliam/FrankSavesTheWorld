@@ -20,7 +20,7 @@ public StoryButton(Model model) throws FileNotFoundException {
 	super(model);
 
 	Image logo = new Image(new FileInputStream("/home/wiler441/Documents/Frank_Pictures/storybutton.png"));
-	getGraphicsContext2D().drawImage(logo, 0, 5, getWidth(), getHeight());
+	getGraphicsContext2D().drawImage(logo, 0, 0, getWidth(), getHeight());
 
 	myText = "The Story about Frank begins in 2000, when\nthe millenia passed and ...";
 		

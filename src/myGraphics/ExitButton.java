@@ -18,8 +18,8 @@ public class ExitButton extends TextButton {
 	public ExitButton (Model model) throws FileNotFoundException {
 		super(model);
 		
-		Image logo = new Image(new FileInputStream("/home/wiler441/Documents/Frank_Pictures/exitbutton.png"));
-		getGraphicsContext2D().drawImage(logo, 0, 5, getWidth(), getHeight());
+		Image exitbutton = new Image(new FileInputStream("/home/wiler441/Documents/Frank_Pictures/exitbutton.png"));
+		getGraphicsContext2D().drawImage(exitbutton, 0, 0, getWidth(), getHeight());
 
 		setOnMouseClicked(event -> {
 	

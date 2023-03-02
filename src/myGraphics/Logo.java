@@ -12,7 +12,7 @@ public class Logo extends Canvas{
 	
 	public Logo () throws FileNotFoundException   {
 		setHeight(1000);
-		setWidth(1000);
+		setWidth(1120);
 		
 		String logoPath = "/home/wiler441/Documents/Frank_Pictures/logo.png";
 		Image logo = new Image(new FileInputStream(logoPath));
