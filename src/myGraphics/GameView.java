@@ -7,6 +7,7 @@ import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import myLogics.PlayRoom;
+import myLogics.PlayRoom.GridContent;
 
 public class GameView extends Group{
 
@@ -14,10 +15,12 @@ public class GameView extends Group{
 	private int rowAmount = 25;
 	private int columnAmount = 38;
 	private Image frank1;
+	private Image wall;
 	private ImageView[][] gridViews;
 	
 	public GameView(PlayRoom pr) throws FileNotFoundException {
-		this.frank1 = new Image(new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/Frank.png"));
+		this.frank1 = new Image(new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/Frank1.png"));
+		this.wall = new Image(new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/blackbox.png"));
 	}
 	public void RenderLevelGraphics() {
 		
@@ -46,15 +49,18 @@ public class GameView extends Group{
 	
 		for (int row = 0; row < rowAmount; row++) {
 			for (int column = 0; column < columnAmount; column++) {
-	this.gridViews[row][column].setImage(null);
-		if (row == pr.getFrankLocation().getX() && column == pr.getFrankLocation().getY()) {
-
-			//	  this.gridViews[(int) pr.getFrankLocation().getX()][(int) pr.getFrankLocation().getY()].setImage(this.frank1);
-				  this.gridViews[row][column].setImage(this.frank1);
-			} 
+				GridContent element = pr.getCellValue(row, column);
 				
+
+		if (row == pr.getFrankLocation().getX() && column == pr.getFrankLocation().getY()) {
+				  this.gridViews[row][column].setImage(this.frank1);
+			} else if (element == GridContent.WALL) {
+				  this.gridViews[row][column].setImage(this.wall);
+		} else {
+			this.gridViews[row][column].setImage(null);
 		}
 	}
 	}
+}
 }
 

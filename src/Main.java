@@ -35,12 +35,12 @@ public class Main extends Application{
 			@Override
 			public void handle(long currentTime) {
 //				
-//				if((currentTime-lastUpdate) > nanoPerUpdate) {
-//					model.getCurrentState().update();
-//					
-//					lastUpdate = currentTime;
-//				}
-//				
+				if((currentTime-lastUpdate) > nanoPerUpdate) {
+					model.getCurrentState().update();
+					
+					lastUpdate = currentTime;
+				}
+				
 			}
 		}.start();
 		

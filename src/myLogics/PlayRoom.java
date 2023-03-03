@@ -28,6 +28,7 @@ public class PlayRoom extends VBox {
 	private GameView gameview;
 	private int rowCount = 25;
 	private int columnCount = 38;
+	private Point2D previousLocation;
 
 	public PlayRoom(Model model) {
 		this.setStyle("-fx-background-color: #f2ca01;");
@@ -110,15 +111,15 @@ public class PlayRoom extends VBox {
 
 		frankVelocity = new Point2D(0, 0);
 		frankLocation = new Point2D(frankRow, frankColumn);
+		previousLocation = frankLocation;
 		System.out.println("Skapa ny Pointers");
 	}
 
 	public void moveTo(KeyCode key) {
 
 		System.out.println("I moveto");
-		// Point2D potentialFrankVelocity = changeVelocity()
-
-		Directions direction = Directions.STAY;
+	
+		Directions direction = Directions.STAY;		
 		if (key == KeyCode.UP) {
 			direction = Directions.NORTH;
 		} else if (key == KeyCode.DOWN) {
@@ -128,12 +129,20 @@ public class PlayRoom extends VBox {
 		} else if (key == KeyCode.LEFT) {
 			direction = Directions.WEST;
 		}
-		Point2D frankVelocity = changeVelocity(direction);
-		frankLocation = frankLocation.add(frankVelocity);
-		gameview.update(this);
+		
+		Point2D futurefrankVelocity = changeVelocity(direction);
+		Point2D futurefrankLocation = frankLocation.add(futurefrankVelocity);
+		
+		if (grid[(int) futurefrankLocation.getX()][(int) futurefrankLocation.getY()] == GridContent.WALL) {
+			futurefrankLocation = previousLocation;
+		}
+		
+		
+		frankVelocity = futurefrankVelocity;
+		frankLocation = futurefrankLocation;
+		previousLocation = frankLocation;
 
-//			
-//		    frankVelocity = changeVelocity(direction);
+
 
 	}
 
@@ -163,6 +172,15 @@ public class PlayRoom extends VBox {
 	public void setFrankLocation(Point2D frankLocation) {
 		this.frankLocation = frankLocation;
 	}
+	  public GridContent getCellValue(int row, int column) {
+	        if (row >= 0 && row < this.grid.length && column >= 0 && column < this.grid[0].length) {
+	        return this.grid[row][column];
+	    } else  {
+	    	return null;
+	    }
+	  }
+
+
 
 // 3. Updatera utanför tryck/updatera innan första tryck
 // 3. Väggar
