@@ -4,7 +4,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import myGraphics.GameView;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
@@ -35,29 +37,75 @@ public class PlayRoom extends VBox {
 			e.printStackTrace();
 		}
 		this.getChildren().add(gameview);
-	
-	}
-	
-	public void StartNewGame() {
-		this.RenderLevel();
-		gameview.initializeGrid();
-		//Här ska vi sen lägga in Booleans som hjälper gör att vi kan vinna/förlora
+
 	}
 
-	public void RenderLevel() {
+	public void StartNewGame(String LevelName) {
+		this.RenderLevel(LevelName);
+		gameview.initializeGrid();
+		// Här ska vi sen lägga in Booleans som hjälper gör att vi kan vinna/förlora
+	}
+
+	public void RenderLevel(String LevelName) {
+
+		File myFile = new File(LevelName);
+		Scanner scanner1 = null;
+
+		try {
+			scanner1 = new Scanner(myFile);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		Scanner scanner2 = null;
+
+		try {
+			scanner2 = new Scanner(myFile);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 
 		grid = new GridContent[rowCount][columnCount];
-	
-		int frankRow = 0;
-		int frankColumn = 0; // implementeras sen när vi läser av banan från en textfil, genom en if sats i for loopen nedan
 
-		for (int row = 0; row < rowCount; ++row) {
-			for (int column = 0; column < columnCount; column++) {
+		int frankRow = 0;
+		int frankColumn = 0; // implementeras sen när vi läser av banan från en textfil, genom en if sats i
+								// for loopen nedan
+		int row = 0;
+
+		while (scanner2.hasNextLine()) {
+			int column = 0;
+			String readRow = scanner2.nextLine();
+//			Scanner readRowScanner = new Scanner(readRow);
+			System.out.println("majsbajs");
+//			while (readRowScanner.hasNext()) {
+//				String element = readRowScanner.next();
+//				System.out.println(element);
+
+			if (row == rowCount) {
+				break;
+			}
+
+			while (true) {
+
+				if (column == columnCount) {
+					break;
+				}
 				GridContent thisValue;
-				thisValue = GridContent.EMPTY;
+				if (readRow.charAt(column) == 'W') {
+					System.out.println("agentComeback");
+					thisValue = GridContent.WALL;
+
+				} else if (readRow.charAt(column) == 'F') {
+					thisValue = GridContent.FRANKSPAWN;
+					frankRow = row;
+					frankColumn = column;
+				} else {
+
+					thisValue = GridContent.EMPTY;
+				}
 				grid[row][column] = thisValue;
-			
-			}		
+				column++;
+			}
+			row++;
 		}
 
 		frankVelocity = new Point2D(0, 0);
@@ -68,7 +116,8 @@ public class PlayRoom extends VBox {
 	public void moveTo(KeyCode key) {
 
 		System.out.println("I moveto");
-		
+		// Point2D potentialFrankVelocity = changeVelocity()
+
 		Directions direction = Directions.STAY;
 		if (key == KeyCode.UP) {
 			direction = Directions.NORTH;
@@ -82,14 +131,14 @@ public class PlayRoom extends VBox {
 		Point2D frankVelocity = changeVelocity(direction);
 		frankLocation = frankLocation.add(frankVelocity);
 		gameview.update(this);
-		
+
 //			
 //		    frankVelocity = changeVelocity(direction);
 
 	}
 
 	public Point2D changeVelocity(Directions direction) {
-System.out.println("Inne i changeVelocity");
+		System.out.println("Inne i changeVelocity");
 		if (direction == Directions.WEST) {
 			return new Point2D(0, -1);
 		} else if (direction == Directions.NORTH) {
@@ -104,7 +153,7 @@ System.out.println("Inne i changeVelocity");
 	}
 
 	public void update() {
-	gameview.update(this);
+		gameview.update(this);
 	}
 
 	public Point2D getFrankLocation() {
@@ -114,10 +163,6 @@ System.out.println("Inne i changeVelocity");
 	public void setFrankLocation(Point2D frankLocation) {
 		this.frankLocation = frankLocation;
 	}
-
-	
-
-
 
 // 3. Updatera utanför tryck/updatera innan första tryck
 // 3. Väggar

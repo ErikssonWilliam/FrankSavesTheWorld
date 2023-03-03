@@ -1,5 +1,9 @@
 package myLogics;
 import javafx.fxml.FXML;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -10,13 +14,24 @@ public class statePlay extends stateOfGame {
 
 	private PlayRoom pr;
 	private String informationText;
-
+	private static final String[] levelArray = {"/home/wiler441/Documents/tdde10_project/Levels/firstLevel.txt"};
+	
+	public static String getLevel(int index) {
+		return levelArray[index];
+	}
+	
 	public statePlay(Model model) {
 		super(model);
 		this.informationText = "Press Escape To Return To The Menu";
 		this.pr = new PlayRoom(model);
 		//pr.getFrankLocation().add(0.0,0.0);
 
+	}
+	public void initialize() {
+		String file = this.getLevel(0);
+//		this.update();
+		//this.startTimer
+		pr.StartNewGame(file);
 	}
 
 	public void keyIntake() {
