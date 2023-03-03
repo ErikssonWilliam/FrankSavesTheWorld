@@ -14,7 +14,7 @@ import javafx.geometry.Point2D;
 public class PlayRoom extends VBox {
 
 	public enum GridContent {
-		EMPTY, FRANKSPAWN, WALL
+		EMPTY, FRANKSPAWN, WALL, NUKEKEY
 	};
 
 	public enum Directions {
@@ -23,26 +23,27 @@ public class PlayRoom extends VBox {
 
 	private GridContent[][] grid;
 
-	private Point2D frankVelocity;
-	private Point2D frankLocation;
+//	private Point2D frankVelocity;
+	private Point2D startLocation;
 	private GameView gameview;
 	private int rowCount = 25;
 	private int columnCount = 38;
 	private Point2D previousLocation;
+	private Frank frank; 
 
 	public PlayRoom(Model model) {
-		this.setStyle("-fx-background-color: #f2ca01;");
+		this.setStyle("-fx-background-color: #b1e6ec;");
 		try {
 			this.gameview = new GameView(this);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 		this.getChildren().add(gameview);
-
 	}
 
 	public void StartNewGame(String LevelName) {
 		this.RenderLevel(LevelName);
+		this.frank = new Frank(startLocation);
 		gameview.initializeGrid();
 		// Här ska vi sen lägga in Booleans som hjälper gör att vi kan vinna/förlora
 	}
@@ -75,12 +76,6 @@ public class PlayRoom extends VBox {
 		while (scanner2.hasNextLine()) {
 			int column = 0;
 			String readRow = scanner2.nextLine();
-//			Scanner readRowScanner = new Scanner(readRow);
-			System.out.println("majsbajs");
-//			while (readRowScanner.hasNext()) {
-//				String element = readRowScanner.next();
-//				System.out.println(element);
-
 			if (row == rowCount) {
 				break;
 			}
@@ -92,15 +87,14 @@ public class PlayRoom extends VBox {
 				}
 				GridContent thisValue;
 				if (readRow.charAt(column) == 'W') {
-					System.out.println("agentComeback");
 					thisValue = GridContent.WALL;
-
 				} else if (readRow.charAt(column) == 'F') {
 					thisValue = GridContent.FRANKSPAWN;
 					frankRow = row;
 					frankColumn = column;
+				} else if (readRow.charAt(column) == 'N') {
+					thisValue = GridContent.NUKEKEY;
 				} else {
-
 					thisValue = GridContent.EMPTY;
 				}
 				grid[row][column] = thisValue;
@@ -109,9 +103,9 @@ public class PlayRoom extends VBox {
 			row++;
 		}
 
-		frankVelocity = new Point2D(0, 0);
-		frankLocation = new Point2D(frankRow, frankColumn);
-		previousLocation = frankLocation;
+		//frankVelocity = new Point2D(0, 0);
+		startLocation = new Point2D(frankRow, frankColumn);
+		//previousLocation = frankLocation;
 		System.out.println("Skapa ny Pointers");
 	}
 
@@ -131,19 +125,26 @@ public class PlayRoom extends VBox {
 		}
 		
 		Point2D futurefrankVelocity = changeVelocity(direction);
-		Point2D futurefrankLocation = frankLocation.add(futurefrankVelocity);
+		Point2D futurefrankLocation = frank.getFrankLocation().add(futurefrankVelocity);
 		
 		if (grid[(int) futurefrankLocation.getX()][(int) futurefrankLocation.getY()] == GridContent.WALL) {
-			futurefrankLocation = previousLocation;
+			futurefrankLocation = previousLocation;//	public Point2D getFrankLocation() {
+//			return frankLocation;
+//			}
+		//
+//			public void setFrankLocation(Point2D frankLocation) {
+//				this.frankLocation = frankLocation;
+//			}
 		}
 		
-		
-		frankVelocity = futurefrankVelocity;
-		frankLocation = futurefrankLocation;
-		previousLocation = frankLocation;
+		frank.setFrankVelocity(futurefrankVelocity);
+//		frankVelocity = futurefrankVelocity;
+		frank.setFrankLocation(futurefrankLocation);
+		previousLocation = frank.getFrankLocation();
+	}
 
-
-
+	public Frank getFrank() {
+		return frank;
 	}
 
 	public Point2D changeVelocity(Directions direction) {
@@ -165,13 +166,13 @@ public class PlayRoom extends VBox {
 		gameview.update(this);
 	}
 
-	public Point2D getFrankLocation() {
-		return frankLocation;
-	}
-
-	public void setFrankLocation(Point2D frankLocation) {
-		this.frankLocation = frankLocation;
-	}
+//	public Point2D getFrankLocation() {
+//		return frankLocation;
+//	}
+//
+//	public void setFrankLocation(Point2D frankLocation) {
+//		this.frankLocation = frankLocation;
+//	}
 	  public GridContent getCellValue(int row, int column) {
 	        if (row >= 0 && row < this.grid.length && column >= 0 && column < this.grid[0].length) {
 	        return this.grid[row][column];
@@ -180,10 +181,11 @@ public class PlayRoom extends VBox {
 	    }
 	  }
 
+	public void giveFrank() {
+		
+	}
 
 
-// 3. Updatera utanför tryck/updatera innan första tryck
-// 3. Väggar
 // 4. Nuklearcard
 // 5. (vinna)
 // 5. säkrehetslampa

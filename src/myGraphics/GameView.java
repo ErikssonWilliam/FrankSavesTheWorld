@@ -16,11 +16,13 @@ public class GameView extends Group{
 	private int columnAmount = 38;
 	private Image frank1;
 	private Image wall;
+	private Image nukekey;
 	private ImageView[][] gridViews;
 	
 	public GameView(PlayRoom pr) throws FileNotFoundException {
 		this.frank1 = new Image(new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/Frank1.png"));
 		this.wall = new Image(new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/blackbox.png"));
+		this.nukekey = new Image(new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/nuclearkey1.png"));
 	}
 	public void RenderLevelGraphics() {
 		
@@ -44,7 +46,7 @@ public class GameView extends Group{
 	}
 	public void update(PlayRoom pr) {
 		System.out.println("Inne i GameView");
-	    System.out.println(pr.getFrankLocation());
+	    System.out.println(pr.getFrank().getFrankLocation());
 
 	
 		for (int row = 0; row < rowAmount; row++) {
@@ -52,10 +54,12 @@ public class GameView extends Group{
 				GridContent element = pr.getCellValue(row, column);
 				
 
-		if (row == pr.getFrankLocation().getX() && column == pr.getFrankLocation().getY()) {
+		if (row == pr.getFrank().getFrankLocation().getX() && column == pr.getFrank().getFrankLocation().getY()) {
 				  this.gridViews[row][column].setImage(this.frank1);
 			} else if (element == GridContent.WALL) {
 				  this.gridViews[row][column].setImage(this.wall);
+			} else if (element == GridContent.NUKEKEY) {
+				  this.gridViews[row][column].setImage(this.nukekey);
 		} else {
 			this.gridViews[row][column].setImage(null);
 		}

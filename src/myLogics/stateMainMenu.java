@@ -11,7 +11,6 @@ public class stateMainMenu extends stateOfGame {
 
 	@Override
 	public void update() {
-// Vi har inget som behöver uppdateras i huvudmenyn
 	}
 
 	public MainMenu getMm() {
@@ -20,14 +19,11 @@ public class stateMainMenu extends stateOfGame {
 
 	@Override
 	public void activate() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void deactivate() {
-		// TODO Auto-generated method stub
-
 	}
 
 }

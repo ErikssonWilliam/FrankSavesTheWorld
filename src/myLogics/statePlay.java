@@ -24,7 +24,6 @@ public class statePlay extends stateOfGame {
 		super(model);
 		this.informationText = "Press Escape To Return To The Menu";
 		this.pr = new PlayRoom(model);
-		//pr.getFrankLocation().add(0.0,0.0);
 
 	}
 	public void initialize() {
@@ -41,7 +40,6 @@ public class statePlay extends stateOfGame {
 				keyPressed(keyEvent);
 			}
 		});
-
 	}
 
 	public PlayRoom getPr() {
@@ -59,27 +57,24 @@ public class statePlay extends stateOfGame {
 		} else if (key.getCode() == KeyCode.LEFT  || key.getCode() == KeyCode.UP ||
 				   key.getCode() == KeyCode.RIGHT || key.getCode() == KeyCode.DOWN){
 			pr.moveTo(key.getCode());
-		
-	
+		} else if (key.getCode() == KeyCode.E) {
+			pr.giveFrank();
 		}
 	}
 
 	@Override
 	public void update() {
 		pr.update();
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void activate() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void deactivate() {
-		// TODO Auto-generated method stub
 
 	}
 
