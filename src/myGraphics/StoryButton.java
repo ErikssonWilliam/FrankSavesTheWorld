@@ -19,7 +19,7 @@ private GraphicsContext gc = getGraphicsContext2D();
 public StoryButton(Model model) throws FileNotFoundException {
 	super(model);
 
-	Image logo = new Image(new FileInputStream("/home/wiler441/Documents/Frank_Pictures/storybutton.png"));
+	Image logo = new Image(new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/storybutton.png"));
 	getGraphicsContext2D().drawImage(logo, 0, 0, getWidth(), getHeight());
 
 	myText = "The Story about Frank begins in 2000, when\nthe millenia passed and ...";

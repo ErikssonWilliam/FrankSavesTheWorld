@@ -17,7 +17,7 @@ public class GameView extends Group{
 	private ImageView[][] gridViews;
 	
 	public GameView(PlayRoom pr) throws FileNotFoundException {
-		this.frank1 = new Image(new FileInputStream("/home/wiler441/Documents/Frank_Pictures/Frank.png"));
+		this.frank1 = new Image(new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/Frank.png"));
 	}
 	public void RenderLevelGraphics() {
 		

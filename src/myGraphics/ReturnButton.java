@@ -21,7 +21,7 @@ public class ReturnButton extends TextButton{
 	public ReturnButton(Model model) throws FileNotFoundException {
 		super(model);
 
-		Image button = new Image(new FileInputStream("/home/wiler441/Documents/Frank_Pictures/returnbutton.png"));
+		Image button = new Image(new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/returnbutton.png"));
 		getGraphicsContext2D().drawImage(button, 0, 0, getWidth(), getHeight());
 		
 		setOnMouseClicked(event -> {

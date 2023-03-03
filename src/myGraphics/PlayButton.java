@@ -20,7 +20,7 @@ public class PlayButton extends TextButton {
 
 	public PlayButton(Model model) throws FileNotFoundException {
 		super(model);
-		Image logo = new Image(new FileInputStream("/home/wiler441/Documents/Frank_Pictures/playbutton.png"));
+		Image logo = new Image(new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/playbutton.png"));
 		getGraphicsContext2D().drawImage(logo, 0, 0, getWidth(), getHeight());
 
 		
@@ -31,6 +31,7 @@ public class PlayButton extends TextButton {
 			Frame frame = new Frame(model);
 			Scene scene = new Scene(frame);
 			model.getMain().setScene(scene);
+			
 			playstate.getPr().StartNewGame(); //Skapa vårat bana 
 			playstate.update();
 			playstate.keyIntake();

@@ -21,7 +21,7 @@ public class HelpButton extends TextButton {
 	public HelpButton(Model model) throws FileNotFoundException {
 		super(model);
 		
-		Image logo = new Image(new FileInputStream("/home/wiler441/Documents/Frank_Pictures/helpbutton.png"));
+		Image logo = new Image(new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/helpbutton.png"));
 		getGraphicsContext2D().drawImage(logo, 0, 0, getWidth(), getHeight());
 	
 		
