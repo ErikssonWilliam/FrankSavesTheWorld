@@ -31,7 +31,7 @@ public class stateTextRoom extends stateOfGame {
 
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
+	//vi har inget som behöver uppdateras i textroom
 
 	}
 

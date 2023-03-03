@@ -13,7 +13,6 @@ public class Frame extends HBox {
 		
 		if (model.getCurrentState() instanceof stateTextRoom) {
 			this.getChildren().add(model.getCurrentState().getTr());
-			System.out.println("willie");
 		} else if (model.getCurrentState() instanceof stateMainMenu){
 			this.getChildren().add(model.getCurrentState().getMm());
 		} else if (model.getCurrentState() instanceof statePlay) {

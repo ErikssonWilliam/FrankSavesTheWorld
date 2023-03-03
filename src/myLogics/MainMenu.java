@@ -25,10 +25,5 @@ public class MainMenu extends HBox{
 			e.printStackTrace();
 		}
 		
-
-	
-//	if (ifFirst) {
-//	mainMenu = new Scene(this);
-//	ifFirst = false;
 	}
 }

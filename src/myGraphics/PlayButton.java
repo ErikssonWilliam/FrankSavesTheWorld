@@ -32,7 +32,7 @@ public class PlayButton extends TextButton {
 			Scene scene = new Scene(frame);
 			model.getMain().setScene(scene);
 			playstate.getPr().StartNewGame(); //Skapa vårat bana 
-			//playstate.update();
+			playstate.update();
 			playstate.keyIntake();
 		});
 

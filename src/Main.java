@@ -26,14 +26,20 @@ public class Main extends Application{
 
 
 		final double targetFps = 64.0;
-		final double nanoperUpdate = 100000000.0/targetFps;
+		final double nanoPerUpdate = 100000000.0/targetFps;
 		
 		arg0.setScene(scene);		
 		
 		new AnimationTimer() {
 			long lastUpdate = 0;
 			@Override
-			public void handle(long arg0) {
+			public void handle(long currentTime) {
+				
+				if((currentTime-lastUpdate) > nanoPerUpdate) {
+					model.getCurrentState().update();
+					
+					lastUpdate = currentTime;
+				}
 				
 			}
 		}.start();

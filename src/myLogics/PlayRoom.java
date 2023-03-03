@@ -12,7 +12,7 @@ import javafx.geometry.Point2D;
 public class PlayRoom extends VBox {
 
 	public enum GridContent {
-		EMPTY, FRANKSPAWN
+		EMPTY, FRANKSPAWN, WALL
 	};
 
 	public enum Directions {
@@ -104,7 +104,7 @@ System.out.println("Inne i changeVelocity");
 	}
 
 	public void update() {
-	//	this.gameview.update(this);
+	gameview.update(this);
 	}
 
 	public Point2D getFrankLocation() {
