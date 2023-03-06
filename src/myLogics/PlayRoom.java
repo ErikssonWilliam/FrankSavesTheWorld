@@ -6,6 +6,7 @@ import myGraphics.GameView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import javafx.fxml.FXML;
@@ -14,7 +15,7 @@ import javafx.geometry.Point2D;
 public class PlayRoom extends VBox {
 
 	public enum GridContent {
-		EMPTY, FRANKSPAWN, WALL, NUKEKEY
+		EMPTY, FRANKSPAWN, WALL, NUKEKEY, DONE, ENEMY
 	};
 
 	public enum Directions {
@@ -28,11 +29,18 @@ public class PlayRoom extends VBox {
 	private GameView gameview;
 	private int rowCount = 25;
 	private int columnCount = 38;
-	private Point2D previousLocation;
+	private int level = 0;
 	private Frank frank; 
+	private boolean winGame;
+	private boolean gameOver;
+	private Boolean isSecondLevel = false;	
+	private statePlay sP;
+	private ArrayList <Enemy> enemies = new ArrayList<Enemy>();
+	private int updateCount = 0;
 
 	public PlayRoom(Model model) {
-		this.setStyle("-fx-background-color: #b1e6ec;");
+		this.setStyle("-fx-background-color: #add8e6;");
+		
 		try {
 			this.gameview = new GameView(this);
 		} catch (FileNotFoundException e) {
@@ -41,7 +49,11 @@ public class PlayRoom extends VBox {
 		this.getChildren().add(gameview);
 	}
 
+	
+	
 	public void StartNewGame(String LevelName) {
+		this.winGame = false;
+		this.gameOver = false;
 		this.RenderLevel(LevelName);
 		this.frank = new Frank(startLocation);
 		gameview.initializeGrid();
@@ -94,6 +106,20 @@ public class PlayRoom extends VBox {
 					frankColumn = column;
 				} else if (readRow.charAt(column) == 'N') {
 					thisValue = GridContent.NUKEKEY;
+				} else if (readRow.charAt(column) == 'D') {
+					thisValue = GridContent.DONE;
+				} else if (readRow.charAt(column) == '>') {
+					thisValue = GridContent.ENEMY;
+					enemies.add(new Enemy(new Point2D(row, column), Directions.EAST, 3, this, "east"));
+				} else if (readRow.charAt(column) == '<') {
+					thisValue = GridContent.ENEMY;
+					enemies.add(new Enemy(new Point2D(row, column), Directions.WEST, 4, this, "west"));
+				} else if (readRow.charAt(column) == 'v') {
+					thisValue = GridContent.ENEMY;
+					enemies.add(new Enemy(new Point2D(row, column), Directions.SOUTH, 2, this, "south"));
+				} else if (readRow.charAt(column) == 'A') {
+					thisValue = GridContent.ENEMY;
+					enemies.add(new Enemy(new Point2D(row, column), Directions.NORTH, 1, this, "north"));
 				} else {
 					thisValue = GridContent.EMPTY;
 				}
@@ -103,52 +129,25 @@ public class PlayRoom extends VBox {
 			row++;
 		}
 
-		//frankVelocity = new Point2D(0, 0);
 		startLocation = new Point2D(frankRow, frankColumn);
-		//previousLocation = frankLocation;
-		System.out.println("Skapa ny Pointers");
 	}
 
-	public void moveTo(KeyCode key) {
-
-		System.out.println("I moveto");
-	
-		Directions direction = Directions.STAY;		
-		if (key == KeyCode.UP) {
-			direction = Directions.NORTH;
-		} else if (key == KeyCode.DOWN) {
-			direction = Directions.SOUTH;
-		} else if (key == KeyCode.RIGHT) {
-			direction = Directions.EAST;
-		} else if (key == KeyCode.LEFT) {
-			direction = Directions.WEST;
-		}
-		
-		Point2D futurefrankVelocity = changeVelocity(direction);
-		Point2D futurefrankLocation = frank.getFrankLocation().add(futurefrankVelocity);
-		
-		if (grid[(int) futurefrankLocation.getX()][(int) futurefrankLocation.getY()] == GridContent.WALL) {
-			futurefrankLocation = previousLocation;//	public Point2D getFrankLocation() {
-//			return frankLocation;
-//			}
-		//
-//			public void setFrankLocation(Point2D frankLocation) {
-//				this.frankLocation = frankLocation;
-//			}
-		}
-		
-		frank.setFrankVelocity(futurefrankVelocity);
-//		frankVelocity = futurefrankVelocity;
-		frank.setFrankLocation(futurefrankLocation);
-		previousLocation = frank.getFrankLocation();
+	public void setGrid(GridContent[][] grid) {
+		this.grid = grid;
 	}
+
+
 
 	public Frank getFrank() {
 		return frank;
 	}
 
+	public GridContent[][] getGrid() {
+		return grid;
+	}
+
 	public Point2D changeVelocity(Directions direction) {
-		System.out.println("Inne i changeVelocity");
+	//	System.out.println("Inne i changeVelocity");
 		if (direction == Directions.WEST) {
 			return new Point2D(0, -1);
 		} else if (direction == Directions.NORTH) {
@@ -162,17 +161,13 @@ public class PlayRoom extends VBox {
 
 	}
 
-	public void update() {
+	public void update(statePlay sP) {
+		this.sP = sP;
+		moveEnemies();
 		gameview.update(this);
+		ChangeLevel();
 	}
 
-//	public Point2D getFrankLocation() {
-//		return frankLocation;
-//	}
-//
-//	public void setFrankLocation(Point2D frankLocation) {
-//		this.frankLocation = frankLocation;
-//	}
 	  public GridContent getCellValue(int row, int column) {
 	        if (row >= 0 && row < this.grid.length && column >= 0 && column < this.grid[0].length) {
 	        return this.grid[row][column];
@@ -182,8 +177,54 @@ public class PlayRoom extends VBox {
 	  }
 
 	public void giveFrank() {
+		if (this.getCellValue((int) frank.getFrankLocation().getX(), (int) frank.getFrankLocation().getY()) == GridContent.NUKEKEY) {
+			frank.setHasNuclearCode(true);
+			update(sP);
+		}
 		
 	}
+	
+	public void ChangeLevel() {
+		
+		if ((this.getCellValue((int) frank.getFrankLocation().getX(), (int) frank.getFrankLocation().getY()) == GridContent.DONE) && frank.getHasNuclearCode()) {
+
+			if (isSecondLevel)
+			enemies.clear();
+
+			setIsSecondLevel(true); 
+			// borde ligga i stateplay
+			
+			sP.initialize();
+			System.out.println(enemies.get(0).getStartLocation());
+		}
+	}
+	
+	public void moveEnemies() { // Uppdaterar fiendernas rörelser
+		updateCount += 1;
+
+		for (int i = 0; i < enemies.size(); i++) {
+		if (updateCount%60 == 0 && enemies.get(i).getType() == "east") {
+			enemies.get(i).moveEnemy();		
+		} else if (updateCount%30 == 0 && enemies.get(i).getType() == "west") {
+			enemies.get(i).moveEnemy();
+		} else if (updateCount%80 == 0 && enemies.get(i).getType() == "south") {
+			enemies.get(i).moveEnemy();
+		} else if (updateCount%20 == 0 && enemies.get(i).getType() == "north") {
+			enemies.get(i).moveEnemy();
+		}
+	}
+	}
+
+
+	public Boolean getIsSecondLevel() {
+		return isSecondLevel;
+	}
+
+	public void setIsSecondLevel(Boolean isSecondLevel) {
+		this.isSecondLevel = isSecondLevel;
+	}
+
+
 
 
 // 4. Nuklearcard

@@ -1,8 +1,4 @@
 package myLogics;
-import javafx.fxml.FXML;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -14,22 +10,29 @@ public class statePlay extends stateOfGame {
 
 	private PlayRoom pr;
 	private String informationText;
-	private static final String[] levelArray = {"/home/wiler441/Documents/tdde10_project/Levels/firstLevel.txt"};
-	
+	private static final String[] levelArray = { "/home/wiler441/Documents/tdde10_project/Levels/firstLevel.txt",
+			"/home/wiler441/Documents/tdde10_project/Levels/secondLevel.txt" };
+
 	public static String getLevel(int index) {
 		return levelArray[index];
 	}
-	
+
 	public statePlay(Model model) {
 		super(model);
 		this.informationText = "Press Escape To Return To The Menu";
 		this.pr = new PlayRoom(model);
 
 	}
+
 	public void initialize() {
-		String file = this.getLevel(0);
-//		this.update();
-		//this.startTimer
+		int index;
+		if (!pr.getIsSecondLevel()) {
+			index = 0;
+		} else {
+			index = 1;
+		}
+		String file = this.getLevel(index);
+		// this.startTimer
 		pr.StartNewGame(file);
 	}
 
@@ -54,9 +57,9 @@ public class statePlay extends stateOfGame {
 			model.changeState(new stateMainMenu(model));
 			Frame frame = new Frame(model);
 			model.getMain().setScene(new Scene(frame));
-		} else if (key.getCode() == KeyCode.LEFT  || key.getCode() == KeyCode.UP ||
-				   key.getCode() == KeyCode.RIGHT || key.getCode() == KeyCode.DOWN){
-			pr.moveTo(key.getCode());
+		} else if (key.getCode() == KeyCode.LEFT || key.getCode() == KeyCode.UP || key.getCode() == KeyCode.RIGHT
+				|| key.getCode() == KeyCode.DOWN) {
+			pr.getFrank().moveTo(key.getCode(), pr);
 		} else if (key.getCode() == KeyCode.E) {
 			pr.giveFrank();
 		}
@@ -64,7 +67,7 @@ public class statePlay extends stateOfGame {
 
 	@Override
 	public void update() {
-		pr.update();
+		pr.update(this);
 
 	}
 
