@@ -1,15 +1,19 @@
 package myLogics;
 
+import java.io.FileNotFoundException;
+
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import myGraphics.Frame;
+import myLogics.PlayRoom.GridContent;
 
 public class statePlay extends stateOfGame {
 
 	private PlayRoom pr;
 	private String informationText;
+	private EventHandler eH;
 	private static final String[] levelArray = { "/home/wiler441/Documents/tdde10_project/Levels/firstLevel.txt",
 			"/home/wiler441/Documents/tdde10_project/Levels/secondLevel.txt" };
 
@@ -65,6 +69,27 @@ public class statePlay extends stateOfGame {
 		}
 	}
 
+
+	public void ChangeLevel() throws FileNotFoundException {
+
+		if ((pr.getCellValue((int) pr.getFrank().getFrankLocation().getX(),
+				(int) pr.getFrank().getFrankLocation().getY()) == GridContent.DONE) && pr.getFrank().getHasNuclearCode()) {
+//System.out.println(isSecondLevel);
+//System.out.println(winGame);
+			if (pr.getIsSecondLevel()) {
+				pr.setWinGame(true);
+			//this.eH = new EventHandler(pr);
+		
+
+			} else {
+
+				pr.getEnemies().clear();
+				pr.setIsSecondLevel(true);
+				// borde ligga i stateplay
+				initialize();
+			}
+		}
+	}
 	@Override
 	public void update() {
 		pr.update(this);

@@ -35,12 +35,13 @@ public class Enemy {
 			return type;
 		}
 
+	
 		public void moveEnemy() {
 			if (stepCount == steps) {
 				enemyDirection = opposite(enemyDirection);
 				stepCount = 0;
 			}
-		//	System.out.println(stepCount);
+
 			Point2D futureEnemyVelocity = pr.changeVelocity(enemyDirection);
 			Point2D futureEnemyLocation = enemyLocation.add(futureEnemyVelocity);
 			
@@ -52,32 +53,38 @@ public class Enemy {
 			pr.getGrid()[(int) previousLocation.getX()][(int) previousLocation.getY()] = GridContent.EMPTY;
 			previousLocation = enemyLocation;
 		    pr.getGrid()[(int) enemyLocation.getX()][(int) enemyLocation.getY()] = GridContent.ENEMY;
+		    flashLight(enemyLocation);
 			stepCount += 1;	
-		//	System.out.println(stepCount);
 		}
 
-//		public Point2D[] flashLight(Point2D enemyLocation) {
-//			if (enemyDirection == Directions.WEST) {
-//				flashLight = [enemyLocation.add((0, -1))][enemyLocation.add((0, -2))][enemyLocation.add((0, -3))]
-//			}else if (enemyDirection == Directions.EAST) {
-//				flashLight = [enemyLocation.add((0, 1))][enemyLocation.add((0, 2))][enemyLocation.add((0, 3))]
-//			}else if (enemyDirection == Directions.NORTH) {
-//				flashLight = [enemyLocation.add((-1, 0))][enemyLocation.add((-2, 0))][enemyLocation.add((-3, 0))]
-//			}else if (enemyDirection == Directions.SOUTH) {
-//				flashLight = [enemyLocation.add((1, 0))][enemyLocation.add((2, 0))][enemyLocation.add((3, 0))]
-//			}
+		public void flashLight(Point2D enemyLocation) {
+			Boolean wallBreak = false;
+			int index1;
+			int index2;
+			flashLight = new Point2D(index1,index2);
+			for (int i=0; i<3; i++ ) {
+//				if (pr.getGrid()[(int) flashLight[i].getX()] [(int) flashLight[i].getY()] == GridContent.WALL ||
+//						wallBreak) {
+//					flashLight[i] = null;
+//					wallBreak = true;
+					
 //
-//			for (int i; i<3; i++) {
-//			if (pr.getGrid()flashLight(i) == gridContent.WALL) {
-//				flashLight(i) = null;
-//			}
-//			
-//			if (flashLight(i) == pr.getFrank().getFrankLocation()) {
-//				pr.setGameover(true);
-//			}
-//			}
-//		
-//		}
+			if (enemyDirection == Directions.WEST) {
+				flashLight[i] = enemyLocation.add(0, -i);
+			}else if (enemyDirection == Directions.EAST) {
+				flashLight[i] = enemyLocation.add(0, i);
+			}else if (enemyDirection == Directions.NORTH) {
+			flashLight[i] = enemyLocation.add(-i, 0);
+			}else if (enemyDirection == Directions.SOUTH) {
+				flashLight[i] = enemyLocation.add(i, 0);
+			}
+			pr.getGrid()[(int) flashLight[i].getX()][(int) flashLight[i].getY()] = GridContent.FLASH;
+			if (flashLight[i] == pr.getFrank().getFrankLocation()) {
+				pr.setGameOver(true);
+			}
+			}
+		}
+
 
 		public Point2D getEnemyLocation() {
 			return enemyLocation;

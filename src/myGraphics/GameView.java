@@ -20,6 +20,8 @@ public class GameView extends Group {
 	private Image finishline;
 	private Image enemy;
 	private Image floor;
+	private Image flash;
+	//private Image winscreen;
 	private ImageView[][] gridViews;
 
 	public GameView(PlayRoom pr) throws FileNotFoundException {
@@ -35,7 +37,12 @@ public class GameView extends Group {
 				new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/evildoctor.png"));
 		this.floor = new Image(
 				new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/floor.png"));
+		this.flash = new Image(
+				new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/flashlight.png"));
+//		this.winscreen = new Image(
+//				new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/winscreen"));
 	}
+
 
 	public void RenderLevelGraphics() {
 
@@ -59,7 +66,8 @@ public class GameView extends Group {
 	}
 
 	public void update(PlayRoom pr) {
-
+		
+	
 		for (int row = 0; row < rowAmount; row++) {
 			for (int column = 0; column < columnAmount; column++) {
 				GridContent element = pr.getCellValue(row, column);
@@ -71,6 +79,8 @@ public class GameView extends Group {
 					this.gridViews[row][column].setImage(wall);
 				} else if (element == GridContent.DONE) {
 					this.gridViews[row][column].setImage(finishline);
+				}else if (element == GridContent.FLASH) {
+					this.gridViews[row][column].setImage(flash);
 				} else if (element == GridContent.NUKEKEY) {
 					if (pr.getFrank().getHasNuclearCode()) {
 						this.gridViews[row][column].setImage(null);

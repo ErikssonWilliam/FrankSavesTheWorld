@@ -1,7 +1,12 @@
 package myLogics;
 
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
+import myGraphics.EventHandler;
+import myGraphics.Frame;
 import myGraphics.GameView;
 
 import java.io.File;
@@ -15,7 +20,7 @@ import javafx.geometry.Point2D;
 public class PlayRoom extends VBox {
 
 	public enum GridContent {
-		EMPTY, FRANKSPAWN, WALL, NUKEKEY, DONE, ENEMY
+		EMPTY, FRANKSPAWN, WALL, NUKEKEY, DONE, ENEMY, FLASH
 	};
 
 	public enum Directions {
@@ -30,27 +35,37 @@ public class PlayRoom extends VBox {
 	private int rowCount = 25;
 	private int columnCount = 38;
 	private int level = 0;
-	private Frank frank; 
+	private Frank frank;
 	private boolean winGame;
 	private boolean gameOver;
-	private Boolean isSecondLevel = false;	
+	private Boolean isSecondLevel = false;
 	private statePlay sP;
-	private ArrayList <Enemy> enemies = new ArrayList<Enemy>();
+	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	private int updateCount = 0;
+	private EventHandler eH;
+
+	public void setGameOver(boolean gameOver) {
+		this.gameOver = gameOver;
+	}
+
+	public ArrayList<Enemy> getEnemies() {
+		return enemies;
+	}
 
 	public PlayRoom(Model model) {
 		this.setStyle("-fx-background-color: #add8e6;");
-		
+
 		try {
 			this.gameview = new GameView(this);
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		this.getChildren().add(gameview);
+		
+			this.getChildren().add(gameview);
+		
 	}
 
-	
-	
 	public void StartNewGame(String LevelName) {
 		this.winGame = false;
 		this.gameOver = false;
@@ -136,8 +151,6 @@ public class PlayRoom extends VBox {
 		this.grid = grid;
 	}
 
-
-
 	public Frank getFrank() {
 		return frank;
 	}
@@ -147,7 +160,7 @@ public class PlayRoom extends VBox {
 	}
 
 	public Point2D changeVelocity(Directions direction) {
-	//	System.out.println("Inne i changeVelocity");
+		// System.out.println("Inne i changeVelocity");
 		if (direction == Directions.WEST) {
 			return new Point2D(0, -1);
 		} else if (direction == Directions.NORTH) {
@@ -165,56 +178,76 @@ public class PlayRoom extends VBox {
 		this.sP = sP;
 		moveEnemies();
 		gameview.update(this);
-		ChangeLevel();
+		try {
+			sP.ChangeLevel();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
-	  public GridContent getCellValue(int row, int column) {
-	        if (row >= 0 && row < this.grid.length && column >= 0 && column < this.grid[0].length) {
-	        return this.grid[row][column];
-	    } else  {
-	    	return null;
-	    }
-	  }
+	public GridContent getCellValue(int row, int column) {
+		if (row >= 0 && row < this.grid.length && column >= 0 && column < this.grid[0].length) {
+			return this.grid[row][column];
+		} else {
+			return null;
+		}
+	}
 
 	public void giveFrank() {
-		if (this.getCellValue((int) frank.getFrankLocation().getX(), (int) frank.getFrankLocation().getY()) == GridContent.NUKEKEY) {
+		if (this.getCellValue((int) frank.getFrankLocation().getX(),
+				(int) frank.getFrankLocation().getY()) == GridContent.NUKEKEY) {
 			frank.setHasNuclearCode(true);
 			update(sP);
 		}
-		
-	}
-	
-	public void ChangeLevel() {
-		
-		if ((this.getCellValue((int) frank.getFrankLocation().getX(), (int) frank.getFrankLocation().getY()) == GridContent.DONE) && frank.getHasNuclearCode()) {
 
-			if (isSecondLevel)
-			enemies.clear();
-
-			setIsSecondLevel(true); 
-			// borde ligga i stateplay
-			
-			sP.initialize();
-			System.out.println(enemies.get(0).getStartLocation());
-		}
 	}
-	
+//
+//	public void ChangeLevel() throws FileNotFoundException {
+//
+//		if ((this.getCellValue((int) frank.getFrankLocation().getX(),
+//				(int) frank.getFrankLocation().getY()) == GridContent.DONE) && frank.getHasNuclearCode()) {
+////System.out.println(isSecondLevel);
+////System.out.println(winGame);
+//			if (isSecondLevel) {
+//				setWinGame(true);
+//			this.eH = new EventHandler(this);
+//			this.getChildren().add(eH);
+//		
+//
+//			} else {
+//
+//				enemies.clear();
+//				setIsSecondLevel(true);
+//				// borde ligga i stateplay
+//				sP.initialize();
+//			}
+//		}
+//	}
+
+	public boolean isWinGame() {
+		return winGame;
+	}
+
+	public void setWinGame(boolean winGame) {
+		this.winGame = winGame;
+	}
+
 	public void moveEnemies() { // Uppdaterar fiendernas rörelser
 		updateCount += 1;
 
 		for (int i = 0; i < enemies.size(); i++) {
-		if (updateCount%60 == 0 && enemies.get(i).getType() == "east") {
-			enemies.get(i).moveEnemy();		
-		} else if (updateCount%30 == 0 && enemies.get(i).getType() == "west") {
-			enemies.get(i).moveEnemy();
-		} else if (updateCount%80 == 0 && enemies.get(i).getType() == "south") {
-			enemies.get(i).moveEnemy();
-		} else if (updateCount%20 == 0 && enemies.get(i).getType() == "north") {
-			enemies.get(i).moveEnemy();
+			if (updateCount % 60 == 0 && enemies.get(i).getType() == "east") {
+				enemies.get(i).moveEnemy();
+			} else if (updateCount % 30 == 0 && enemies.get(i).getType() == "west") {
+				enemies.get(i).moveEnemy();
+			} else if (updateCount % 80 == 0 && enemies.get(i).getType() == "south") {
+				enemies.get(i).moveEnemy();
+			} else if (updateCount % 20 == 0 && enemies.get(i).getType() == "north") {
+				enemies.get(i).moveEnemy();
+			}
 		}
 	}
-	}
-
 
 	public Boolean getIsSecondLevel() {
 		return isSecondLevel;
@@ -223,9 +256,6 @@ public class PlayRoom extends VBox {
 	public void setIsSecondLevel(Boolean isSecondLevel) {
 		this.isSecondLevel = isSecondLevel;
 	}
-
-
-
 
 // 4. Nuklearcard
 // 5. (vinna)
