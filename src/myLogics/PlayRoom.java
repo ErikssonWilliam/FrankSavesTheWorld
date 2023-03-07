@@ -5,7 +5,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
-import myGraphics.EventHandler;
+import myGraphics.GameResult;
 import myGraphics.Frame;
 import myGraphics.GameView;
 
@@ -42,7 +42,7 @@ public class PlayRoom extends VBox {
 	private statePlay sP;
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	private int updateCount = 0;
-	private EventHandler eH;
+	
 
 	public void setGameOver(boolean gameOver) {
 		this.gameOver = gameOver;

@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import myGraphics.Frame;
+import myGraphics.GameResult;
 import myLogics.PlayRoom.GridContent;
 
 public class statePlay extends stateOfGame {
@@ -14,6 +15,7 @@ public class statePlay extends stateOfGame {
 	private PlayRoom pr;
 	private String informationText;
 	private EventHandler eH;
+	private GameResult gR;
 	private static final String[] levelArray = { "/home/wiler441/Documents/tdde10_project/Levels/firstLevel.txt",
 			"/home/wiler441/Documents/tdde10_project/Levels/secondLevel.txt" };
 
@@ -78,6 +80,7 @@ public class statePlay extends stateOfGame {
 //System.out.println(winGame);
 			if (pr.getIsSecondLevel()) {
 				pr.setWinGame(true);
+				this.gR = new GameResult(pr, true);
 			//this.eH = new EventHandler(pr);
 		
 
