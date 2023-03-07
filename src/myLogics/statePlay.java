@@ -67,7 +67,10 @@ public class statePlay extends stateOfGame {
 			pr.getFrank().moveTo(key.getCode(), pr);
 		} else if (key.getCode() == KeyCode.E) {
 			pr.giveFrank();
+		} else if (key.getCode() == KeyCode.U) {
+			pr.useEmp();
 		}
+		
 	}
 
 
@@ -79,10 +82,8 @@ public class statePlay extends stateOfGame {
 			if (pr.getIsSecondLevel()) {
 		pr.DisplayResult(true);
 			} else {
-
 				pr.getEnemies().clear();
 				pr.setIsSecondLevel(true);
-				// borde ligga i stateplay
 				initialize();
 			}
 		}

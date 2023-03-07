@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import javafx.scene.layout.VBox;
 import myGraphics.ReturnButton;
 import myGraphics.TextGround;
+import myGraphics.emptyRoom;
 
 public class TextRoom extends VBox{
 	
@@ -13,10 +14,12 @@ public class TextRoom extends VBox{
     	this.setStyle("-fx-background-color: #f2ca01;");
     	
 		    ReturnButton rB = new ReturnButton(model);
-			TextGround text = new TextGround(myText);		
+			TextGround text = new TextGround(myText);
+			emptyRoom eR = new emptyRoom(model);
 			
 			this.getChildren().add(text);
 			this.getChildren().add(rB);
+			this.getChildren().add(eR);
 		}	
 
 }

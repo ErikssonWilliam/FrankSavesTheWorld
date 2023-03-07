@@ -21,7 +21,9 @@ public class GameView extends Group {
 	private Image enemy;
 	private Image floor;
 	private Image flash;
-	//private Image winscreen;
+	private Image camera;
+	private Image controlpanel;
+	private Image emp;
 	private ImageView[][] gridViews;
 
 	public GameView(PlayRoom pr) throws FileNotFoundException {
@@ -30,17 +32,21 @@ public class GameView extends Group {
 		this.wall = new Image(
 				new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/blackbox.png"));
 		this.nukekey = new Image(
-				new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/nuclearkey1.png"));
+				new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/nuclearkey.png"));
 		this.finishline = new Image(
 				new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/finish.png"));
 		this.enemy = new Image(
-				new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/evildoctor.png"));
+				new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/soldierdiscover1.png"));
 		this.floor = new Image(
 				new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/floor.png"));
 		this.flash = new Image(
 				new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/flashlight.png"));
-//		this.winscreen = new Image(
-//				new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/winscreen"));
+		this.camera = new Image(
+				new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/camera.png"));
+		this.controlpanel = new Image(
+				new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/controlpanel1.png"));
+		this.emp = new Image(
+				new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/emp.png"));
 	}
 
 
@@ -79,16 +85,18 @@ public class GameView extends Group {
 					this.gridViews[row][column].setImage(wall);
 				} else if (element == GridContent.DONE) {
 					this.gridViews[row][column].setImage(finishline);
+				} else if (element == GridContent.CAMERA) {
+					this.gridViews[row][column].setImage(camera);
 				}else if (element == GridContent.FLASH) {
 					this.gridViews[row][column].setImage(flash);
+				}else if (element == GridContent.EMP) {
+					this.gridViews[row][column].setImage(emp);
 				} else if (element == GridContent.NUKEKEY) {
-					if (pr.getFrank().getHasNuclearCode()) {
-						this.gridViews[row][column].setImage(null);
-					} else {
 						this.gridViews[row][column].setImage(nukekey);
-					}
 				} else if (element == GridContent.ENEMY) {
 					this.gridViews[row][column].setImage(enemy);
+				} else if (element == GridContent.CONTROLPANEL) {
+					this.gridViews[row][column].setImage(controlpanel);
 				} else {
 					this.gridViews[row][column].setImage(floor);
 				}

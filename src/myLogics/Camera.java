@@ -13,24 +13,22 @@ public class Camera {
 	}
 	
 	public void initializeCam() {
-		for (int column=-2; column<2; column++) {
-			for (int row=-2; row<2; row++) {
-				if (pr.getGrid()[(int) location.getX()+row][(int) location.getY()+row] == GridContent.WALL) {
-					break;
-				}
-				pr.getGrid()[(int) location.getX()+row][(int) location.getY()+row] = GridContent.FLASH;
-			}
+		
+		for (int row=-1; row<1; row++) {
+			for (int column=-3; column<0; column++) {
+
+					System.out.println("skapa flash");
+				pr.getGrid()[(int) location.getX()+row][(int) location.getY()+column] = GridContent.FLASH;
+		}
 		}
 	}
-	
+
 	public void killCam() {
-		for (int column=-2; column<2; column++) {
-			for (int row=-2; row<2; row++) {
-				if (pr.getGrid()[(int) location.getX()+row][(int) location.getY()+row] == GridContent.WALL) {
-					break;
-				}
-				pr.getGrid()[(int) location.getX()+row][(int) location.getY()+row] = GridContent.EMPTY;
-			}
+		for (int row=-1; row<1; row++) {
+			for (int column=-3; column<0; column++) {
+					System.out.println("skapa flash");
+				pr.getGrid()[(int) location.getX()+row][(int) location.getY()+column] = GridContent.EMPTY;
+		}
 		}
 	}
 }

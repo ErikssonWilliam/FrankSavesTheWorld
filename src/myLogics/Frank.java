@@ -9,12 +9,21 @@ public class Frank {
 
 	private Boolean hasNuclearCode = false;
 	private Boolean hasEMP = false;
+	private Boolean usedEMP = false;
 	private Point2D frankLocation;
 	private Point2D frankVelocity;
 	private Point2D previousLocation;
     private PlayRoom pr;
     
 	
+	public Boolean getUsedEMP() {
+		return usedEMP;
+	}
+
+	public void setUsedEMP(Boolean usedEMP) {
+		this.usedEMP = usedEMP;
+	}
+
 	public Frank(Point2D startLocation) {
 		this.frankLocation = startLocation;
 	}
@@ -49,9 +58,17 @@ public class Frank {
 //		frankVelocity = futurefrankVelocity;
 		setFrankLocation(futurefrankLocation);
 		previousLocation = getFrankLocation();
-		pr.giveFrank();
+//		pr.giveFrank();
 	}
 	
+
+	public Boolean getHasEMP() {
+		return hasEMP;
+	}
+
+	public void setHasEMP(Boolean hasEMP) {
+		this.hasEMP = hasEMP;
+	}
 
 	public Boolean getHasNuclearCode() {
 		return hasNuclearCode;

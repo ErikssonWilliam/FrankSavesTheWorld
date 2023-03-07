@@ -11,11 +11,11 @@ public class TextGround extends Canvas {
 	
 	public TextGround(String myText) {
 		
-		setWidth(1500);
-		setHeight(600);
+		setWidth(1520);
+		setHeight(800);
 		
-	gc.setFill(Color.GREEN);
-	gc.setFont(new Font (30));
+	gc.setFill(Color.DARKBLUE);
+	gc.setFont(new Font (40));
 	gc.fillText(myText, getWidth()/4, 100);	
 	}
 }

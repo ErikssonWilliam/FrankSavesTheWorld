@@ -9,6 +9,7 @@ import myGraphics.GameResult;
 import myGraphics.Frame;
 import myGraphics.GameView;
 import myGraphics.showResult;
+import myLogics.PlayRoom.GridContent;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,7 +21,7 @@ import javafx.geometry.Point2D;
 public class PlayRoom extends VBox {
 
 	public enum GridContent {
-		EMPTY, FRANKSPAWN, WALL, NUKEKEY, DONE, ENEMY, FLASH
+		EMPTY, FRANKSPAWN, WALL, NUKEKEY, DONE, ENEMY, FLASH, CAMERA, CONTROLPANEL, EMP
 	};
 
 	public enum Directions {
@@ -29,7 +30,6 @@ public class PlayRoom extends VBox {
 
 	private GridContent[][] grid;
 
-//	private Point2D frankVelocity;
 	private Point2D startLocation;
 	private GameView gameview;
 	private int rowCount = 25;
@@ -38,28 +38,29 @@ public class PlayRoom extends VBox {
 	private Boolean isSecondLevel = false;
 	private statePlay sP;
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+	private ArrayList<Camera> cameras = new ArrayList<Camera>();
 	private int updateCount = 0;
 	private Model model;
+	private int empCount = 0;
 
-	
 	public ArrayList<Enemy> getEnemies() {
 		return enemies;
 	}
 
 	public PlayRoom(Model model) {
 		this.setStyle("-fx-background-color: #add8e6;");
-this.model= model;
+		this.model = model;
 		try {
 			this.gameview = new GameView(this);
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		
-			this.getChildren().add(gameview);
-		
-	}
 
+		this.getChildren().add(gameview);
+
+	}
+	
 	public void StartNewGame(String LevelName) {
 		this.RenderLevel(LevelName);
 		this.frank = new Frank(startLocation);
@@ -104,7 +105,7 @@ this.model= model;
 				if (column == columnCount) {
 					break;
 				}
-				GridContent thisValue;
+				GridContent thisValue = null;
 				if (readRow.charAt(column) == 'W') {
 					thisValue = GridContent.WALL;
 				} else if (readRow.charAt(column) == 'F') {
@@ -114,9 +115,18 @@ this.model= model;
 				} else if (readRow.charAt(column) == 'N') {
 					thisValue = GridContent.NUKEKEY;
 				} else if (readRow.charAt(column) == 'D') {
-					thisValue = GridContent.DONE;
+					thisValue = GridContent.DONE;	
+				} else if (readRow.charAt(column) == 'P') {
+						thisValue = GridContent.CONTROLPANEL;	
+				} else if (readRow.charAt(column) == 'e') {
+					thisValue = GridContent.EMP;	
+				} else if (readRow.charAt(column) == 'C') {
+					thisValue = GridContent.CAMERA;
+					Camera camera = new Camera(new Point2D(row, column), this);
+					cameras.add(camera);
+					camera.initializeCam();
 				} else if (readRow.charAt(column) == '>') {
-					thisValue = GridContent.ENEMY;
+				thisValue = GridContent.ENEMY;
 					enemies.add(new Enemy(new Point2D(row, column), Directions.EAST, 3, this, "east", model));
 				} else if (readRow.charAt(column) == '<') {
 					thisValue = GridContent.ENEMY;
@@ -127,7 +137,7 @@ this.model= model;
 				} else if (readRow.charAt(column) == 'A') {
 					thisValue = GridContent.ENEMY;
 					enemies.add(new Enemy(new Point2D(row, column), Directions.NORTH, 1, this, "north", model));
-				} else {
+				} else if (readRow.charAt(column) == 'E'){
 					thisValue = GridContent.EMPTY;
 				}
 				grid[row][column] = thisValue;
@@ -152,7 +162,6 @@ this.model= model;
 	}
 
 	public Point2D changeVelocity(Directions direction) {
-		// System.out.println("Inne i changeVelocity");
 		if (direction == Directions.WEST) {
 			return new Point2D(0, -1);
 		} else if (direction == Directions.NORTH) {
@@ -170,13 +179,37 @@ this.model= model;
 		this.sP = sP;
 		moveEnemies();
 		gameview.update(this);
+		statusofFrank();
 		try {
 			sP.ChangeLevel();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+
+	private void statusofFrank() {	
+		 if (grid[(int)frank.getFrankLocation().getX()]
+				[(int) frank.getFrankLocation().getY()] == GridContent.FLASH) {
+			try {
+				this.DisplayResult(false);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+		} 
+		 else if (grid[(int)frank.getFrankLocation().getX()-1]
+				[(int) frank.getFrankLocation().getY()-1] == GridContent.CONTROLPANEL) {
+			for (int i=0; i<cameras.size(); i++) {
+				cameras.get(i).killCam();
+		}
+		 }
+			else if (grid[(int)frank.getFrankLocation().getX()]
+				[(int) frank.getFrankLocation().getY()] == GridContent.CONTROLPANEL) {
+			for (int i=0; i<cameras.size(); i++) {
+				cameras.get(i).killCam();
+		}
+		
+	}
+		 }
 
 	public GridContent getCellValue(int row, int column) {
 		if (row >= 0 && row < this.grid.length && column >= 0 && column < this.grid[0].length) {
@@ -187,30 +220,30 @@ this.model= model;
 	}
 
 	public void giveFrank() {
+
 		if (this.getCellValue((int) frank.getFrankLocation().getX(),
 				(int) frank.getFrankLocation().getY()) == GridContent.NUKEKEY) {
 			frank.setHasNuclearCode(true);
-			update(sP);
+			grid[(int) frank.getFrankLocation().getX()][(int) frank.getFrankLocation().getY()] = GridContent.EMPTY;
+		} else if (this.getCellValue((int) frank.getFrankLocation().getX(),
+				(int) frank.getFrankLocation().getY()) == GridContent.EMP) {
+			frank.setHasEMP(true);
+			grid[(int) frank.getFrankLocation().getX()][(int) frank.getFrankLocation().getY()] = GridContent.EMPTY;
 		}
-
-	}
 	
+		
+	}
+
 	public void DisplayResult(Boolean win) throws FileNotFoundException {
 
 		System.out.println("i display result");
-	
 		model.changeState(new stateResult(this, model, win));
 		Frame frame = new Frame(model);
 		model.getMain().setScene(new Scene(frame));
-
-		//model.changeState(new stateMainMenu(model));
-//		Frame frame = new Frame(model);
-//		model.getMain().setScene(new Scene(frame));
 	}
 
 	public void moveEnemies() { // Uppdaterar fiendernas rörelser
 		updateCount += 1;
-
 		for (int i = 0; i < enemies.size(); i++) {
 			if (updateCount % 60 == 0 && enemies.get(i).getType() == "east") {
 				enemies.get(i).moveEnemy();
@@ -222,6 +255,14 @@ this.model= model;
 				enemies.get(i).moveEnemy();
 			}
 		}
+		if (frank.getUsedEMP()) {
+			empCount +=1;
+		}
+		if (empCount == 400) {
+			frank.setUsedEMP(false);
+			frank.setHasEMP(false);
+		}
+		 
 	}
 
 	public Boolean getIsSecondLevel() {
@@ -231,7 +272,12 @@ this.model= model;
 	public void setIsSecondLevel(Boolean isSecondLevel) {
 		this.isSecondLevel = isSecondLevel;
 	}
-	
+
+	public void useEmp() {
+		if (frank.getHasEMP()) {
+			frank.setUsedEMP(true);
+		}
+	}
 
 // 4. Nuklearcard
 // 5. (vinna)
