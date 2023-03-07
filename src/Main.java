@@ -37,7 +37,6 @@ public class Main extends Application{
 //				
 				if((currentTime-lastUpdate) > nanoPerUpdate) {
 					model.getCurrentState().update();
-					
 					lastUpdate = currentTime;
 				}
 				

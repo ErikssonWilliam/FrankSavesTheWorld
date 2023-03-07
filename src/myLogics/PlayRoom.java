@@ -8,13 +8,13 @@ import javafx.scene.layout.VBox;
 import myGraphics.GameResult;
 import myGraphics.Frame;
 import myGraphics.GameView;
+import myGraphics.showResult;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 
 public class PlayRoom extends VBox {
@@ -34,27 +34,21 @@ public class PlayRoom extends VBox {
 	private GameView gameview;
 	private int rowCount = 25;
 	private int columnCount = 38;
-	private int level = 0;
 	private Frank frank;
-	private boolean winGame;
-	private boolean gameOver;
 	private Boolean isSecondLevel = false;
 	private statePlay sP;
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	private int updateCount = 0;
+	private Model model;
+
 	
-
-	public void setGameOver(boolean gameOver) {
-		this.gameOver = gameOver;
-	}
-
 	public ArrayList<Enemy> getEnemies() {
 		return enemies;
 	}
 
 	public PlayRoom(Model model) {
 		this.setStyle("-fx-background-color: #add8e6;");
-
+this.model= model;
 		try {
 			this.gameview = new GameView(this);
 
@@ -67,8 +61,6 @@ public class PlayRoom extends VBox {
 	}
 
 	public void StartNewGame(String LevelName) {
-		this.winGame = false;
-		this.gameOver = false;
 		this.RenderLevel(LevelName);
 		this.frank = new Frank(startLocation);
 		gameview.initializeGrid();
@@ -125,16 +117,16 @@ public class PlayRoom extends VBox {
 					thisValue = GridContent.DONE;
 				} else if (readRow.charAt(column) == '>') {
 					thisValue = GridContent.ENEMY;
-					enemies.add(new Enemy(new Point2D(row, column), Directions.EAST, 3, this, "east"));
+					enemies.add(new Enemy(new Point2D(row, column), Directions.EAST, 3, this, "east", model));
 				} else if (readRow.charAt(column) == '<') {
 					thisValue = GridContent.ENEMY;
-					enemies.add(new Enemy(new Point2D(row, column), Directions.WEST, 4, this, "west"));
+					enemies.add(new Enemy(new Point2D(row, column), Directions.WEST, 4, this, "west", model));
 				} else if (readRow.charAt(column) == 'v') {
 					thisValue = GridContent.ENEMY;
-					enemies.add(new Enemy(new Point2D(row, column), Directions.SOUTH, 2, this, "south"));
+					enemies.add(new Enemy(new Point2D(row, column), Directions.SOUTH, 2, this, "south", model));
 				} else if (readRow.charAt(column) == 'A') {
 					thisValue = GridContent.ENEMY;
-					enemies.add(new Enemy(new Point2D(row, column), Directions.NORTH, 1, this, "north"));
+					enemies.add(new Enemy(new Point2D(row, column), Directions.NORTH, 1, this, "north", model));
 				} else {
 					thisValue = GridContent.EMPTY;
 				}
@@ -202,35 +194,18 @@ public class PlayRoom extends VBox {
 		}
 
 	}
-//
-//	public void ChangeLevel() throws FileNotFoundException {
-//
-//		if ((this.getCellValue((int) frank.getFrankLocation().getX(),
-//				(int) frank.getFrankLocation().getY()) == GridContent.DONE) && frank.getHasNuclearCode()) {
-////System.out.println(isSecondLevel);
-////System.out.println(winGame);
-//			if (isSecondLevel) {
-//				setWinGame(true);
-//			this.eH = new EventHandler(this);
-//			this.getChildren().add(eH);
-//		
-//
-//			} else {
-//
-//				enemies.clear();
-//				setIsSecondLevel(true);
-//				// borde ligga i stateplay
-//				sP.initialize();
-//			}
-//		}
-//	}
+	
+	public void DisplayResult(Boolean win) throws FileNotFoundException {
 
-	public boolean isWinGame() {
-		return winGame;
-	}
+		System.out.println("i display result");
+	
+		model.changeState(new stateResult(this, model, win));
+		Frame frame = new Frame(model);
+		model.getMain().setScene(new Scene(frame));
 
-	public void setWinGame(boolean winGame) {
-		this.winGame = winGame;
+		//model.changeState(new stateMainMenu(model));
+//		Frame frame = new Frame(model);
+//		model.getMain().setScene(new Scene(frame));
 	}
 
 	public void moveEnemies() { // Uppdaterar fiendernas rörelser
@@ -256,6 +231,7 @@ public class PlayRoom extends VBox {
 	public void setIsSecondLevel(Boolean isSecondLevel) {
 		this.isSecondLevel = isSecondLevel;
 	}
+	
 
 // 4. Nuklearcard
 // 5. (vinna)

@@ -2,12 +2,15 @@ package myLogics;
 
 import java.io.FileNotFoundException;
 
+import javafx.scene.canvas.Canvas;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import myGraphics.ExitButton;
 import myGraphics.HelpButton;
 import myGraphics.PlayButton;
 import myGraphics.StoryButton;
 import myGraphics.TextButton;
+import myGraphics.emptyRoom;
 
 public class Options extends VBox{
 	
@@ -28,6 +31,9 @@ public class Options extends VBox{
     	
     	ExitButton myEB = new ExitButton(model);
     	this.getChildren().add(myEB);
+
+		emptyRoom myEp = new emptyRoom(model);
+		this.getChildren().add(myEp);
     	
     	this.setStyle("-fx-background-color: #f2ca01;");
 	}

@@ -20,8 +20,7 @@ public class PlayButton extends TextButton {
 
 	public PlayButton(Model model) throws FileNotFoundException {
 		super(model);
-		Image logo = new Image(new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/playbutton.png"));
-		getGraphicsContext2D().drawImage(logo, 0, 0, getWidth(), getHeight());
+		getGraphicsContext2D().drawImage(model.getPictures().getPlayButton(), 0, 0, getWidth(), getHeight());
 
 		
 		setOnMouseClicked(event -> {

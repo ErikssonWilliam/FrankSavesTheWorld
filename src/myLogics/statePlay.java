@@ -14,7 +14,6 @@ public class statePlay extends stateOfGame {
 
 	private PlayRoom pr;
 	private String informationText;
-	private EventHandler eH;
 	private GameResult gR;
 	private static final String[] levelArray = { "/home/wiler441/Documents/tdde10_project/Levels/firstLevel.txt",
 			"/home/wiler441/Documents/tdde10_project/Levels/secondLevel.txt" };
@@ -76,14 +75,9 @@ public class statePlay extends stateOfGame {
 
 		if ((pr.getCellValue((int) pr.getFrank().getFrankLocation().getX(),
 				(int) pr.getFrank().getFrankLocation().getY()) == GridContent.DONE) && pr.getFrank().getHasNuclearCode()) {
-//System.out.println(isSecondLevel);
-//System.out.println(winGame);
-			if (pr.getIsSecondLevel()) {
-				pr.setWinGame(true);
-				this.gR = new GameResult(true);
-			//this.eH = new EventHandler(pr);
-		
 
+			if (pr.getIsSecondLevel()) {
+		pr.DisplayResult(true);
 			} else {
 
 				pr.getEnemies().clear();
@@ -93,6 +87,10 @@ public class statePlay extends stateOfGame {
 			}
 		}
 	}
+	public GameResult getgR() {
+		return gR;
+	}
+
 	@Override
 	public void update() {
 		pr.update(this);

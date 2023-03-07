@@ -27,6 +27,11 @@ public abstract class stateOfGame {
 	public Node getPr() {
 		return null;
 	}
+	
+	public Node getSr() {
+		return null;
+	}
+	
 
 	public void keyPressed(KeyEvent key) {
 	}

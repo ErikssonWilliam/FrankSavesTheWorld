@@ -1,9 +1,11 @@
 package myLogics;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import javafx.geometry.Point2D;
+import myGraphics.GameResult;
 import myLogics.PlayRoom.Directions;
 import myLogics.PlayRoom.GridContent;
 
@@ -20,8 +22,9 @@ public class Enemy {
 	private String type;
 	private ArrayList <Point2D> flashLight;
 	private Boolean firstLight = true;
+	private Model model;
 
-	public Enemy(Point2D startLocation, Directions direction, int steps, PlayRoom pr, String type) {
+	public Enemy(Point2D startLocation, Directions direction, int steps, PlayRoom pr, String type, Model model) {
 		this.enemyLocation = startLocation;
 		this.startLocation = startLocation;
 		this.enemyDirection = direction;
@@ -30,6 +33,7 @@ public class Enemy {
 		this.pr = pr;
 		this.type = type;
 		this.flashLight = new ArrayList<Point2D>();
+		this.model = model;
 	
 	}
 
@@ -42,8 +46,8 @@ public class Enemy {
 	}
 
 	public void moveEnemy() {
-		System.out.println(steps);
-		System.out.println(stepCount);
+		//System.out.println(steps);
+		//System.out.println(stepCount);
 		if (stepCount == steps) {
 			enemyDirection = opposite(enemyDirection);
 			stepCount = 0;
@@ -51,9 +55,9 @@ public class Enemy {
 
 
 		Point2D futureEnemyVelocity = pr.changeVelocity(enemyDirection); // Här blir det fel får negtiva index
-		System.out.println(futureEnemyVelocity);
+		//System.out.println(futureEnemyVelocity);
 		Point2D futureEnemyLocation = enemyLocation.add(futureEnemyVelocity);
-		System.out.println(futureEnemyLocation);
+		//System.out.println(futureEnemyLocation);
 
 		if (pr.getGrid()[(int) futureEnemyLocation.getX()][(int) futureEnemyLocation.getY()] == GridContent.WALL) {
 			futureEnemyLocation = previousLocation;
@@ -65,11 +69,16 @@ public class Enemy {
 	
 		pr.getGrid()[(int) enemyLocation.getX()][(int) enemyLocation.getY()] = GridContent.ENEMY;
 		stepCount += 1;
-		System.out.println("EmenyLocation " + enemyLocation);
-		flashLight(enemyLocation, futureEnemyVelocity);
+		//System.out.println("EmenyLocation " + enemyLocation);
+		try {
+			flashLight(enemyLocation);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
-	public void flashLight(Point2D enemyLocation, Point2D futureEnemyVelocity) {
+	public void flashLight(Point2D enemyLocation) throws FileNotFoundException {
 	
 		Boolean hitWall = false;
 		ArrayList <Point2D> oldFlashLight = new ArrayList<Point2D>();
@@ -81,7 +90,7 @@ public class Enemy {
 		}
 		
 		for (int i = 0; i < 3; i++) {
-			System.out.println(enemyLocation + "ingående location");
+			//System.out.println(enemyLocation + "ingående location");
 
 		
 				if (enemyDirection == Directions.WEST) {
@@ -101,7 +110,7 @@ public class Enemy {
 				}
 				pr.getGrid()[(int) flashLight.get(i).getX()][(int) flashLight.get(i).getY()] = GridContent.FLASH;
 				if (flashLight.get(i) == pr.getFrank().getFrankLocation()) {
-					pr.setGameOver(true);
+					pr.DisplayResult(false);
 				}
 				//if (!hitWall) {
 				if (i < oldFlashLight.size()) {
