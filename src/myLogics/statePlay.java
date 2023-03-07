@@ -80,7 +80,7 @@ public class statePlay extends stateOfGame {
 //System.out.println(winGame);
 			if (pr.getIsSecondLevel()) {
 				pr.setWinGame(true);
-				this.gR = new GameResult(pr, true);
+				this.gR = new GameResult(true);
 			//this.eH = new EventHandler(pr);
 		
 
