@@ -22,14 +22,17 @@ private Boolean win;
 	public GameResult (Model model,Boolean win) throws FileNotFoundException {
 		this.model=model;
 		this.win = win;
+		setWidth(1520);
+		setHeight(780);
 		if (this.win) {
 			System.out.println("ladda bild");
 		Image winScreen= new Image(new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/winscreen.png"));
-		gc.drawImage(winScreen, 0, 0, 500, 500);
+		gc.drawImage(winScreen, 0, 0, getWidth(), getHeight());
 		
 	} else {
-//		Image gameOverScreen= new Image(new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/.png"));
-//		gc.drawImage(gameOverScreen, 0, 0, getWidth(), getHeight());
+		System.out.println("ladda game over");
+		Image gameOverScreen= new Image(new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/loosescreen.png"));
+		gc.drawImage(gameOverScreen, 0, 0, getWidth(), getHeight());	
 	}
 	}
 	

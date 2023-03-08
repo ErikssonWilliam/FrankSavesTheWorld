@@ -65,7 +65,7 @@ public class PlayRoom extends VBox {
 		this.RenderLevel(LevelName);
 		this.frank = new Frank(startLocation);
 		gameview.initializeGrid();
-		// Här ska vi sen lägga in Booleans som hjälper gör att vi kan vinna/förlora
+
 	}
 
 	public void RenderLevel(String LevelName) {
@@ -236,7 +236,6 @@ public class PlayRoom extends VBox {
 
 	public void DisplayResult(Boolean win) throws FileNotFoundException {
 
-		System.out.println("i display result");
 		model.changeState(new stateResult(this, model, win));
 		Frame frame = new Frame(model);
 		model.getMain().setScene(new Scene(frame));
@@ -279,10 +278,4 @@ public class PlayRoom extends VBox {
 		}
 	}
 
-// 4. Nuklearcard
-// 5. (vinna)
-// 5. säkrehetslampa
-// 6. panel
-// 7. Vakt
-// 8. emp
 }

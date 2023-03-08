@@ -2,14 +2,14 @@ package myLogics;
 
 import java.io.FileNotFoundException;
 
-import javafx.scene.canvas.Canvas;
-import javafx.scene.layout.HBox;
+
 import javafx.scene.layout.VBox;
 import myGraphics.ExitButton;
 import myGraphics.HelpButton;
 import myGraphics.PlayButton;
+import myGraphics.ScoreButton;
 import myGraphics.StoryButton;
-import myGraphics.TextButton;
+
 import myGraphics.emptyRoom;
 
 public class Options extends VBox{
@@ -23,15 +23,18 @@ public class Options extends VBox{
 		PlayButton myPB = new PlayButton(model);
 		this.getChildren().add(myPB);
 		
-		StoryButton mySB = new StoryButton(model);
-		this.getChildren().add(mySB);
+		StoryButton mySB1 = new StoryButton(model);
+		this.getChildren().add(mySB1);
     	
     	HelpButton myHB = new HelpButton(model);
     	this.getChildren().add(myHB);
     	
+    	ScoreButton mySB2 = new ScoreButton(model);
+    	this.getChildren().add(mySB2);
+    	
     	ExitButton myEB = new ExitButton(model);
     	this.getChildren().add(myEB);
-
+    	
 		emptyRoom myEp = new emptyRoom(model);
 		this.getChildren().add(myEp);
     	

@@ -6,7 +6,7 @@ import java.io.FileNotFoundException;
 import javafx.scene.image.Image;
 import myLogics.Model;
 
-public class emptyRoom extends TextButton {
+public class emptyRoom extends Button {
 
 	public emptyRoom(Model model) throws FileNotFoundException {
 		super(model);

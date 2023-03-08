@@ -13,7 +13,7 @@ import myLogics.Model;
 import myLogics.stateMainMenu;
 
 
-public class ReturnButton extends TextButton{
+public class ReturnButton extends Button{
 
 	private stateMainMenu mainMenu;
 	private GraphicsContext gc = getGraphicsContext2D();

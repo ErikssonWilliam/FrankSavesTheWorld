@@ -11,10 +11,10 @@ import myLogics.MainMenu;
 import myLogics.Model;
 import myLogics.stateTextRoom;
 
-public class StoryButton extends TextButton {
+public class StoryButton extends Button {
 private String myText;
-private stateTextRoom textRoom;
-private GraphicsContext gc = getGraphicsContext2D();
+private stateTextRoom stateTextRoom;
+private int fontSize;
 
 public StoryButton(Model model) throws FileNotFoundException {
 	super(model);
@@ -32,10 +32,11 @@ public StoryButton(Model model) throws FileNotFoundException {
 			+ "\nevil corporation EvilCorp. "
 			+ "\nThis is Frank... Saves the world!?";
 		
+	fontSize = 40;
 	setOnMouseClicked(event -> {
-		textRoom = new stateTextRoom(model, myText);
+		stateTextRoom = new stateTextRoom(model, myText, fontSize);
 
-		model.changeState(textRoom);
+		model.changeState(stateTextRoom);
 		Frame frame = new Frame(model);
 		model.getMain().setScene(new Scene(frame));
 		

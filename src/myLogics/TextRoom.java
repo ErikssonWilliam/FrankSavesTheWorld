@@ -9,12 +9,12 @@ import myGraphics.emptyRoom;
 
 public class TextRoom extends VBox{
 	
-	public TextRoom(Model model, String myText) throws FileNotFoundException {
+	public TextRoom(Model model, String myText, int fontSize) throws FileNotFoundException {
 
     	this.setStyle("-fx-background-color: #f2ca01;");
     	
 		    ReturnButton rB = new ReturnButton(model);
-			TextGround text = new TextGround(myText);
+			TextGround text = new TextGround(myText, fontSize);
 			emptyRoom eR = new emptyRoom(model);
 			
 			this.getChildren().add(text);

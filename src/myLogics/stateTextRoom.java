@@ -11,12 +11,11 @@ public class stateTextRoom extends stateOfGame {
 
 	private TextRoom tr;
 
-	public stateTextRoom(Model model, String myText) {
+	public stateTextRoom(Model model, String myText, int fontSize) {
 		super(model);
 		try {
-			tr = new TextRoom(model, myText);
+			tr = new TextRoom(model, myText, fontSize);
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

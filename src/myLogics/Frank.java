@@ -15,15 +15,6 @@ public class Frank {
 	private Point2D previousLocation;
     private PlayRoom pr;
     
-	
-	public Boolean getUsedEMP() {
-		return usedEMP;
-	}
-
-	public void setUsedEMP(Boolean usedEMP) {
-		this.usedEMP = usedEMP;
-	}
-
 	public Frank(Point2D startLocation) {
 		this.frankLocation = startLocation;
 	}
@@ -32,7 +23,6 @@ public class Frank {
 		
 		this.pr =pr;
 
-		System.out.println("I moveto");
 	
 		Directions direction = Directions.STAY;		
 		if (key == KeyCode.UP) {
@@ -50,15 +40,13 @@ public class Frank {
 		
 		if (pr.getGrid()[(int) futurefrankLocation.getX()][(int) futurefrankLocation.getY()] == GridContent.WALL || 
 				pr.getGrid()[(int) futurefrankLocation.getX()][(int) futurefrankLocation.getY()] == GridContent.ENEMY ) {
-			futurefrankLocation = previousLocation;//	public Point2D getFrankLocation() {
-//
+			futurefrankLocation = previousLocation;
 		}
 		
 		setFrankVelocity(futurefrankVelocity);
-//		frankVelocity = futurefrankVelocity;
+
 		setFrankLocation(futurefrankLocation);
 		previousLocation = getFrankLocation();
-//		pr.giveFrank();
 	}
 	
 
@@ -94,4 +82,11 @@ public class Frank {
 		this.frankVelocity = frankVelocity;
 	}
 
+	public Boolean getUsedEMP() {
+		return usedEMP;
+	}
+
+	public void setUsedEMP(Boolean usedEMP) {
+		this.usedEMP = usedEMP;
+	}
 }

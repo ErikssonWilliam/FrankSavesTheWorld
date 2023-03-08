@@ -9,13 +9,13 @@ public class TextGround extends Canvas {
 
 	private GraphicsContext gc = getGraphicsContext2D();
 	
-	public TextGround(String myText) {
+	public TextGround(String myText, int fontSize) {
 		
 		setWidth(1520);
-		setHeight(800);
+		setHeight(780);
 		
 	gc.setFill(Color.DARKBLUE);
-	gc.setFont(new Font (40));
+	gc.setFont(new Font (fontSize));
 	gc.fillText(myText, getWidth()/4, 100);	
 	}
 }

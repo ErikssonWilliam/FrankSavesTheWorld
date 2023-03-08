@@ -11,7 +11,7 @@ import javafx.scene.paint.Color;
 import myLogics.Model;
 import myLogics.stateTextRoom;
 
-public class ExitButton extends TextButton {
+public class ExitButton extends Button {
 
 	private GraphicsContext gc = getGraphicsContext2D();
 	

@@ -1,6 +1,11 @@
 package myLogics;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.util.Collections;
 
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -13,8 +18,8 @@ import myLogics.PlayRoom.GridContent;
 public class statePlay extends stateOfGame {
 
 	private PlayRoom pr;
-	private String informationText;
 	private GameResult gR;
+	private long startTime;
 	private static final String[] levelArray = { "/home/wiler441/Documents/tdde10_project/Levels/firstLevel.txt",
 			"/home/wiler441/Documents/tdde10_project/Levels/secondLevel.txt" };
 
@@ -24,7 +29,6 @@ public class statePlay extends stateOfGame {
 
 	public statePlay(Model model) {
 		super(model);
-		this.informationText = "Press Escape To Return To The Menu";
 		this.pr = new PlayRoom(model);
 
 	}
@@ -33,12 +37,31 @@ public class statePlay extends stateOfGame {
 		int index;
 		if (!pr.getIsSecondLevel()) {
 			index = 0;
+			this.recordTime(true);
 		} else {
 			index = 1;
 		}
 		String file = this.getLevel(index);
-		// this.startTimer
 		pr.StartNewGame(file);
+	}
+
+	private void recordTime(Boolean start) {
+		if (start) {
+			startTime = System.nanoTime();
+		} else if (!start) {
+			long score = (System.nanoTime() - startTime)/1000000000;
+			model.getHighScores().add(score);
+			Collections.sort(model.getHighScores());
+			model.getHighScores().remove(model.getAmountOfScores());
+		
+			try {
+				ObjectOutputStream outStream = new ObjectOutputStream(new FileOutputStream(model.getFile()));
+				outStream.writeObject(model.getHighScores());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
 	}
 
 	public void keyIntake() {
@@ -56,7 +79,7 @@ public class statePlay extends stateOfGame {
 
 	@Override
 	public void keyPressed(KeyEvent key) {
-		System.out.println("Trycker på " + key.getCode() + " i PlayState");
+		
 
 		if (key.getCode() == KeyCode.ESCAPE) {
 			model.changeState(new stateMainMenu(model));
@@ -70,17 +93,18 @@ public class statePlay extends stateOfGame {
 		} else if (key.getCode() == KeyCode.U) {
 			pr.useEmp();
 		}
-		
-	}
 
+	}
 
 	public void ChangeLevel() throws FileNotFoundException {
 
 		if ((pr.getCellValue((int) pr.getFrank().getFrankLocation().getX(),
-				(int) pr.getFrank().getFrankLocation().getY()) == GridContent.DONE) && pr.getFrank().getHasNuclearCode()) {
+				(int) pr.getFrank().getFrankLocation().getY()) == GridContent.DONE)
+				&& pr.getFrank().getHasNuclearCode()) {
 
 			if (pr.getIsSecondLevel()) {
-		pr.DisplayResult(true);
+				this.recordTime(false);
+				pr.DisplayResult(true);
 			} else {
 				pr.getEnemies().clear();
 				pr.setIsSecondLevel(true);
@@ -88,6 +112,7 @@ public class statePlay extends stateOfGame {
 			}
 		}
 	}
+
 	public GameResult getgR() {
 		return gR;
 	}

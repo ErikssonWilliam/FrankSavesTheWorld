@@ -12,7 +12,7 @@ public class MainMenu extends HBox{
 	public MainMenu(Model model) {
 		
 		try {
-			Logo logo = new Logo();
+			Logo logo = new Logo(model);
 			this.getChildren().add(logo);
 		} catch (Exception FileNotFoundException) {
 		}

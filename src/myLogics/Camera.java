@@ -17,7 +17,7 @@ public class Camera {
 		for (int row=-1; row<1; row++) {
 			for (int column=-3; column<0; column++) {
 
-					System.out.println("skapa flash");
+					
 				pr.getGrid()[(int) location.getX()+row][(int) location.getY()+column] = GridContent.FLASH;
 		}
 		}
@@ -26,7 +26,7 @@ public class Camera {
 	public void killCam() {
 		for (int row=-1; row<1; row++) {
 			for (int column=-3; column<0; column++) {
-					System.out.println("skapa flash");
+
 				pr.getGrid()[(int) location.getX()+row][(int) location.getY()+column] = GridContent.EMPTY;
 		}
 		}

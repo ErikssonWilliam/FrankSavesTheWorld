@@ -8,11 +8,11 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import myGraphics.Frame;
-import myGraphics.TextButton;
+import myGraphics.Button;
 import myLogics.Model;
 import myLogics.statePlay;
 
-public class PlayButton extends TextButton {
+public class PlayButton extends Button {
 
 	private String code;
 	private statePlay playstate;
