@@ -1,16 +1,9 @@
 package myLogics;
 
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
-import myGraphics.GameResult;
 import myGraphics.Frame;
 import myGraphics.GameView;
-import myGraphics.showResult;
-import myLogics.PlayRoom.GridContent;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -36,7 +29,6 @@ public class PlayRoom extends VBox {
 	private int columnCount = 38;
 	private Frank frank;
 	private Boolean isSecondLevel = false;
-	private statePlay sP;
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	private ArrayList<Camera> cameras = new ArrayList<Camera>();
 	private int updateCount = 0;
@@ -60,7 +52,7 @@ public class PlayRoom extends VBox {
 		this.getChildren().add(gameview);
 
 	}
-	
+
 	public void StartNewGame(String LevelName) {
 		this.RenderLevel(LevelName);
 		this.frank = new Frank(startLocation);
@@ -115,29 +107,29 @@ public class PlayRoom extends VBox {
 				} else if (readRow.charAt(column) == 'N') {
 					thisValue = GridContent.NUKEKEY;
 				} else if (readRow.charAt(column) == 'D') {
-					thisValue = GridContent.DONE;	
+					thisValue = GridContent.DONE;
 				} else if (readRow.charAt(column) == 'P') {
-						thisValue = GridContent.CONTROLPANEL;	
+					thisValue = GridContent.CONTROLPANEL;
 				} else if (readRow.charAt(column) == 'e') {
-					thisValue = GridContent.EMP;	
+					thisValue = GridContent.EMP;
 				} else if (readRow.charAt(column) == 'C') {
 					thisValue = GridContent.CAMERA;
 					Camera camera = new Camera(new Point2D(row, column), this);
 					cameras.add(camera);
 					camera.initializeCam();
 				} else if (readRow.charAt(column) == '>') {
-				thisValue = GridContent.ENEMY;
-					enemies.add(new Enemy(new Point2D(row, column), Directions.EAST, 3, this, "east", model));
+					thisValue = GridContent.ENEMY;
+					enemies.add(new Enemy(new Point2D(row, column), Directions.EAST, 3, this, "east"));
 				} else if (readRow.charAt(column) == '<') {
 					thisValue = GridContent.ENEMY;
-					enemies.add(new Enemy(new Point2D(row, column), Directions.WEST, 4, this, "west", model));
+					enemies.add(new Enemy(new Point2D(row, column), Directions.WEST, 4, this, "west"));
 				} else if (readRow.charAt(column) == 'v') {
 					thisValue = GridContent.ENEMY;
-					enemies.add(new Enemy(new Point2D(row, column), Directions.SOUTH, 2, this, "south", model));
+					enemies.add(new Enemy(new Point2D(row, column), Directions.SOUTH, 2, this, "south"));
 				} else if (readRow.charAt(column) == 'A') {
 					thisValue = GridContent.ENEMY;
-					enemies.add(new Enemy(new Point2D(row, column), Directions.NORTH, 1, this, "north", model));
-				} else if (readRow.charAt(column) == 'E'){
+					enemies.add(new Enemy(new Point2D(row, column), Directions.NORTH, 1, this, "north"));
+				} else if (readRow.charAt(column) == 'E') {
 					thisValue = GridContent.EMPTY;
 				}
 				grid[row][column] = thisValue;
@@ -176,7 +168,6 @@ public class PlayRoom extends VBox {
 	}
 
 	public void update(statePlay sP) {
-		this.sP = sP;
 		moveEnemies();
 		gameview.update(this);
 		statusofFrank();
@@ -187,29 +178,26 @@ public class PlayRoom extends VBox {
 		}
 	}
 
-	private void statusofFrank() {	
-		 if (grid[(int)frank.getFrankLocation().getX()]
-				[(int) frank.getFrankLocation().getY()] == GridContent.FLASH) {
+	private void statusofFrank() {
+		if (grid[(int) frank.getFrankLocation().getX()][(int) frank.getFrankLocation().getY()] == GridContent.FLASH) {
 			try {
 				this.DisplayResult(false);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
-		} 
-		 else if (grid[(int)frank.getFrankLocation().getX()-1]
-				[(int) frank.getFrankLocation().getY()-1] == GridContent.CONTROLPANEL) {
-			for (int i=0; i<cameras.size(); i++) {
+		} else if (grid[(int) frank.getFrankLocation().getX() - 1][(int) frank.getFrankLocation().getY()
+				- 1] == GridContent.CONTROLPANEL) {
+			for (int i = 0; i < cameras.size(); i++) {
 				cameras.get(i).killCam();
-		}
-		 }
-			else if (grid[(int)frank.getFrankLocation().getX()]
-				[(int) frank.getFrankLocation().getY()] == GridContent.CONTROLPANEL) {
-			for (int i=0; i<cameras.size(); i++) {
+			}
+		} else if (grid[(int) frank.getFrankLocation().getX()][(int) frank.getFrankLocation()
+				.getY()] == GridContent.CONTROLPANEL) {
+			for (int i = 0; i < cameras.size(); i++) {
 				cameras.get(i).killCam();
+			}
+
 		}
-		
 	}
-		 }
 
 	public GridContent getCellValue(int row, int column) {
 		if (row >= 0 && row < this.grid.length && column >= 0 && column < this.grid[0].length) {
@@ -230,8 +218,7 @@ public class PlayRoom extends VBox {
 			frank.setHasEMP(true);
 			grid[(int) frank.getFrankLocation().getX()][(int) frank.getFrankLocation().getY()] = GridContent.EMPTY;
 		}
-	
-		
+
 	}
 
 	public void DisplayResult(Boolean win) throws FileNotFoundException {
@@ -255,13 +242,13 @@ public class PlayRoom extends VBox {
 			}
 		}
 		if (frank.getUsedEMP()) {
-			empCount +=1;
+			empCount += 1;
 		}
 		if (empCount == 400) {
 			frank.setUsedEMP(false);
 			frank.setHasEMP(false);
 		}
-		 
+
 	}
 
 	public Boolean getIsSecondLevel() {

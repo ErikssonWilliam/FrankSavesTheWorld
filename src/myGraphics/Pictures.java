@@ -14,7 +14,7 @@ public class Pictures {
 	private Image logo;
 	private Image exitButton;
 
-	public Pictures()  {
+	public Pictures() {
 
 		try {
 			playButton = new Image(
@@ -27,15 +27,13 @@ public class Pictures {
 					new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/scorebutton.png"));
 			returnButton = new Image(
 					new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/returnbutton.png"));
-			logo = new Image(
-					new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/logo.png"));
+			logo = new Image(new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/logo.png"));
 			exitButton = new Image(
 					new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/exitbutton.png"));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 
 	}
 
@@ -95,4 +93,3 @@ public class Pictures {
 		this.logo = logo;
 	}
 }
-

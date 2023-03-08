@@ -1,6 +1,5 @@
 package myLogics;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -23,7 +22,7 @@ public class statePlay extends stateOfGame {
 	private static final String[] levelArray = { "/home/wiler441/Documents/tdde10_project/Levels/firstLevel.txt",
 			"/home/wiler441/Documents/tdde10_project/Levels/secondLevel.txt" };
 
-	public static String getLevel(int index) {
+	public String getLevel(int index) {
 		return levelArray[index];
 	}
 
@@ -41,19 +40,19 @@ public class statePlay extends stateOfGame {
 		} else {
 			index = 1;
 		}
-		String file = this.getLevel(index);
-		pr.StartNewGame(file);
+		
+		pr.StartNewGame(this.getLevel(index));
 	}
 
 	private void recordTime(Boolean start) {
 		if (start) {
 			startTime = System.nanoTime();
 		} else if (!start) {
-			long score = (System.nanoTime() - startTime)/1000000000;
+			long score = (System.nanoTime() - startTime) / 1000000000;
 			model.getHighScores().add(score);
 			Collections.sort(model.getHighScores());
 			model.getHighScores().remove(model.getAmountOfScores());
-		
+
 			try {
 				ObjectOutputStream outStream = new ObjectOutputStream(new FileOutputStream(model.getFile()));
 				outStream.writeObject(model.getHighScores());
@@ -79,7 +78,6 @@ public class statePlay extends stateOfGame {
 
 	@Override
 	public void keyPressed(KeyEvent key) {
-		
 
 		if (key.getCode() == KeyCode.ESCAPE) {
 			model.changeState(new stateMainMenu(model));

@@ -4,15 +4,16 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import myLogics.Model;
 
 public class TextGround extends Canvas {
 
 	private GraphicsContext gc = getGraphicsContext2D();
 	
-	public TextGround(String myText, int fontSize) {
+	public TextGround(Model model, String myText, int fontSize) {
 		
-		setWidth(1520);
-		setHeight(780);
+		setWidth(model.getTextGroundWidth());
+		setHeight(model.getTextGroudHeight());
 		
 	gc.setFill(Color.DARKBLUE);
 	gc.setFont(new Font (fontSize));

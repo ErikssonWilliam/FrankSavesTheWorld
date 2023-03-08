@@ -3,12 +3,13 @@ package myLogics;
 import myGraphics.showResult;
 
 public class stateResult extends stateOfGame {
-	
+
 	private showResult sR;
+
 	public stateResult(PlayRoom pr, Model model, Boolean win) {
 		super(model);
-		this.sR = new showResult(pr,model,win);
-		
+		this.sR = new showResult(pr, model, win);
+
 		// TODO Auto-generated constructor stub
 	}
 

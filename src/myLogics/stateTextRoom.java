@@ -2,11 +2,6 @@ package myLogics;
 
 import java.io.FileNotFoundException;
 
-import javafx.scene.layout.VBox;
-import myGraphics.ReturnButton;
-import myLogics.Model;
-import myLogics.stateOfGame;
-
 public class stateTextRoom extends stateOfGame {
 
 	private TextRoom tr;
@@ -19,18 +14,15 @@ public class stateTextRoom extends stateOfGame {
 			e.printStackTrace();
 		}
 
-
 	}
-
 
 	public TextRoom getTr() {
 		return tr;
 	}
 
-
 	@Override
 	public void update() {
-	//vi har inget som behöver uppdateras i textroom
+		// vi har inget som behöver uppdateras i textroom
 
 	}
 

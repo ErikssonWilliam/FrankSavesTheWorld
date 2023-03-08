@@ -13,7 +13,7 @@ public class Frank {
 	private Point2D frankLocation;
 	private Point2D frankVelocity;
 	private Point2D previousLocation;
-    private PlayRoom pr;
+ 
     
 	public Frank(Point2D startLocation) {
 		this.frankLocation = startLocation;
@@ -21,9 +21,6 @@ public class Frank {
 
 	public void moveTo(KeyCode key, PlayRoom pr) {
 		
-		this.pr =pr;
-
-	
 		Directions direction = Directions.STAY;		
 		if (key == KeyCode.UP) {
 			direction = Directions.NORTH;
@@ -39,7 +36,9 @@ public class Frank {
 		Point2D futurefrankLocation = this.getFrankLocation().add(futurefrankVelocity);
 		
 		if (pr.getGrid()[(int) futurefrankLocation.getX()][(int) futurefrankLocation.getY()] == GridContent.WALL || 
-				pr.getGrid()[(int) futurefrankLocation.getX()][(int) futurefrankLocation.getY()] == GridContent.ENEMY ) {
+				pr.getGrid()[(int) futurefrankLocation.getX()][(int) futurefrankLocation.getY()] == GridContent.ENEMY || 
+				pr.getGrid()[(int) futurefrankLocation.getX()][(int) futurefrankLocation.getY()] == GridContent.CAMERA ||
+				pr.getGrid()[(int) futurefrankLocation.getX()][(int) futurefrankLocation.getY()] == GridContent.CONTROLPANEL ) {
 			futurefrankLocation = previousLocation;
 		}
 		

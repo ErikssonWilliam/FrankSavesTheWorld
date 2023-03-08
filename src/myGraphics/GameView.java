@@ -37,21 +37,14 @@ public class GameView extends Group {
 				new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/finish.png"));
 		this.enemy = new Image(
 				new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/soldierdiscover1.png"));
-		this.floor = new Image(
-				new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/floor.png"));
+		this.floor = new Image(new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/floor.png"));
 		this.flash = new Image(
 				new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/flashlight.png"));
 		this.camera = new Image(
 				new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/camera.png"));
 		this.controlpanel = new Image(
 				new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/controlpanel1.png"));
-		this.emp = new Image(
-				new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/emp.png"));
-	}
-
-
-	public void RenderLevelGraphics() {
-
+		this.emp = new Image(new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/emp.png"));
 	}
 
 	public void initializeGrid() {
@@ -72,8 +65,7 @@ public class GameView extends Group {
 	}
 
 	public void update(PlayRoom pr) {
-		
-	
+
 		for (int row = 0; row < rowAmount; row++) {
 			for (int column = 0; column < columnAmount; column++) {
 				GridContent element = pr.getCellValue(row, column);
@@ -87,12 +79,12 @@ public class GameView extends Group {
 					this.gridViews[row][column].setImage(finishline);
 				} else if (element == GridContent.CAMERA) {
 					this.gridViews[row][column].setImage(camera);
-				}else if (element == GridContent.FLASH) {
+				} else if (element == GridContent.FLASH) {
 					this.gridViews[row][column].setImage(flash);
-				}else if (element == GridContent.EMP) {
+				} else if (element == GridContent.EMP) {
 					this.gridViews[row][column].setImage(emp);
 				} else if (element == GridContent.NUKEKEY) {
-						this.gridViews[row][column].setImage(nukekey);
+					this.gridViews[row][column].setImage(nukekey);
 				} else if (element == GridContent.ENEMY) {
 					this.gridViews[row][column].setImage(enemy);
 				} else if (element == GridContent.CONTROLPANEL) {

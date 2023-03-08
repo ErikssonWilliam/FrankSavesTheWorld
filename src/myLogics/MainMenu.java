@@ -1,16 +1,15 @@
 package myLogics;
 
-
 import java.io.FileNotFoundException;
 
 import javafx.scene.layout.HBox;
 
 import myGraphics.Logo;
 
-public class MainMenu extends HBox{
+public class MainMenu extends HBox {
 
 	public MainMenu(Model model) {
-		
+
 		try {
 			Logo logo = new Logo(model);
 			this.getChildren().add(logo);
@@ -24,6 +23,6 @@ public class MainMenu extends HBox{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 }
