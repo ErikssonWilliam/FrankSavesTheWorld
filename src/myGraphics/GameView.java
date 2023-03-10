@@ -2,13 +2,17 @@ package myGraphics;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import myLogics.PlayRoom;
 import myLogics.PlayRoom.GridContent;
 
+/**
+ * Updates the view of the game as well as storing the different pictures used
+ * in-game
+ * @author wiler441
+ */
 public class GameView extends Group {
 
 	public final static double CELL_SIZE = 40.0;
@@ -25,6 +29,7 @@ public class GameView extends Group {
 	private Image controlpanel;
 	private Image emp;
 	private ImageView[][] gridViews;
+	private Boolean firstFrank;
 
 	public GameView(PlayRoom pr) throws FileNotFoundException {
 		this.frank1 = new Image(
@@ -47,6 +52,9 @@ public class GameView extends Group {
 		this.emp = new Image(new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/emp.png"));
 	}
 
+	/**
+	 * Sets the preconditions for the soon to be viewed game
+	 */
 	public void initializeGrid() {
 
 		gridViews = new ImageView[rowAmount][columnAmount];
@@ -60,17 +68,25 @@ public class GameView extends Group {
 				imageView.setFitHeight(CELL_SIZE);
 				this.gridViews[row][column] = imageView;
 				this.getChildren().add(imageView);
+				firstFrank = true;
 			}
 		}
 	}
 
+	/**
+	 * Updates the gameview for every update in the playroom
+	 * @param pr
+	 */
 	public void update(PlayRoom pr) {
 
 		for (int row = 0; row < rowAmount; row++) {
 			for (int column = 0; column < columnAmount; column++) {
 				GridContent element = pr.getCellValue(row, column);
 
-				if (row == pr.getFrank().getFrankLocation().getX()
+				if (firstFrank && element == GridContent.FRANKSPAWN) {
+					this.gridViews[row][column].setImage(frank1);
+					firstFrank = false;
+				} else if (row == pr.getFrank().getFrankLocation().getX()
 						&& column == pr.getFrank().getFrankLocation().getY()) {
 					this.gridViews[row][column].setImage(frank1);
 				} else if (element == GridContent.WALL) {

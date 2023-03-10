@@ -2,6 +2,10 @@ package myLogics;
 
 import java.io.FileNotFoundException;
 
+/**
+ * enables state of the TextRoom 
+ * @author wiler441
+ */
 public class stateTextRoom extends stateOfGame {
 
 	private TextRoom tr;
@@ -13,7 +17,6 @@ public class stateTextRoom extends stateOfGame {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	public TextRoom getTr() {
@@ -22,19 +25,5 @@ public class stateTextRoom extends stateOfGame {
 
 	@Override
 	public void update() {
-		// vi har inget som behöver uppdateras i textroom
-
-	}
-
-	@Override
-	public void activate() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void deactivate() {
-		// TODO Auto-generated method stub
-
 	}
 }

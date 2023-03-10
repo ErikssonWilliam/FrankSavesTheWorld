@@ -6,6 +6,10 @@ import javafx.scene.canvas.GraphicsContext;
 import myLogics.Model;
 import myLogics.stateMainMenu;
 
+/**
+ * Returns to the main menu when clicked
+ * @author wiler441
+ */
 public class ReturnButton extends Button {
 
 	private stateMainMenu mainMenu;
@@ -19,7 +23,6 @@ public class ReturnButton extends Button {
 		setOnMouseClicked(event -> {
 			mainMenu = new stateMainMenu(model);
 			model.changeState(mainMenu);
-
 			Frame frame = new Frame(model);
 			model.getMain().setScene(new Scene(frame));
 

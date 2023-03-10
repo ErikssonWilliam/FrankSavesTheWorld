@@ -5,6 +5,10 @@ import javafx.scene.Scene;
 import myLogics.Model;
 import myLogics.stateTextRoom;
 
+/**
+ * Writes and activates the story in the textroom when clicked in the menu
+ * @author wiler441
+ */
 public class StoryButton extends Button {
 	private String myText;
 	private stateTextRoom stateTextRoom;
@@ -30,6 +34,5 @@ public class StoryButton extends Button {
 			model.getMain().setScene(new Scene(frame));
 
 		});
-
 	}
 }

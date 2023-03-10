@@ -1,13 +1,15 @@
 package myGraphics;
 
 import java.io.FileNotFoundException;
-
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
-
 import myLogics.Model;
 import myLogics.stateTextRoom;
 
+/**
+ * Writes and activates the help-instructions in the textroom when clicked in the menu
+ * @author wiler441
+ */
 public class HelpButton extends Button {
 
 	private String myText;
@@ -44,14 +46,10 @@ public class HelpButton extends Button {
 
 		setOnMouseClicked(event -> {
 			stateTextRoom = new stateTextRoom(model, myText, fontSize);
-
 			model.changeState(stateTextRoom);
-
 			Frame frame = new Frame(model);
 			model.getMain().setScene(new Scene(frame));
 
 		});
-
 	}
-
 }

@@ -7,6 +7,10 @@ import myGraphics.ReturnButton;
 import myGraphics.TextGround;
 import myGraphics.emptyRoom;
 
+/**
+ * The Box/design of the Textroom
+ * @author wiler441
+ */
 public class TextRoom extends VBox {
 
 	public TextRoom(Model model, String myText, int fontSize) throws FileNotFoundException {

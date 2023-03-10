@@ -5,6 +5,11 @@ import javafx.scene.input.KeyCode;
 import myLogics.PlayRoom.Directions;
 import myLogics.PlayRoom.GridContent;
 
+/**
+ * Frank handles the certain aspects of the object Frank.
+ * Location, movement, emp-usage & nuclearkey
+ * @author wiler441
+ */
 public class Frank {
 
 	private Boolean hasNuclearCode = false;
@@ -13,12 +18,16 @@ public class Frank {
 	private Point2D frankLocation;
 	private Point2D frankVelocity;
 	private Point2D previousLocation;
- 
     
 	public Frank(Point2D startLocation) {
 		this.frankLocation = startLocation;
 	}
 
+	/**
+	 * Handles movement of Frank
+	 * @param key
+	 * @param pr
+	 */
 	public void moveTo(KeyCode key, PlayRoom pr) {
 		
 		Directions direction = Directions.STAY;		
@@ -33,22 +42,31 @@ public class Frank {
 		}
 		
 		Point2D futurefrankVelocity = pr.changeVelocity(direction);
-		Point2D futurefrankLocation = this.getFrankLocation().add(futurefrankVelocity);
+		Point2D futurefrankLocation = frankLocation.add(futurefrankVelocity);
 		
 		if (pr.getGrid()[(int) futurefrankLocation.getX()][(int) futurefrankLocation.getY()] == GridContent.WALL || 
-				pr.getGrid()[(int) futurefrankLocation.getX()][(int) futurefrankLocation.getY()] == GridContent.ENEMY || 
 				pr.getGrid()[(int) futurefrankLocation.getX()][(int) futurefrankLocation.getY()] == GridContent.CAMERA ||
 				pr.getGrid()[(int) futurefrankLocation.getX()][(int) futurefrankLocation.getY()] == GridContent.CONTROLPANEL ) {
 			futurefrankLocation = previousLocation;
-		}
-		
+		}		
 		setFrankVelocity(futurefrankVelocity);
-
 		setFrankLocation(futurefrankLocation);
 		previousLocation = getFrankLocation();
 	}
 	
-
+	/**
+	 * Handles the emp-usage
+	 */
+	public void useEmp() {
+		if (getHasEMP()) {
+			setUsedEMP(true);
+		}
+	}
+		
+	/**
+	 * Getters and setters
+	 * @return
+	 */
 	public Boolean getHasEMP() {
 		return hasEMP;
 	}

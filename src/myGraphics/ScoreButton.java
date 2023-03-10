@@ -7,6 +7,11 @@ import javafx.scene.canvas.GraphicsContext;
 import myLogics.Model;
 import myLogics.stateTextRoom;
 
+/**
+ * Writes and activates the scores in the textroom when clicked in the menu
+ * The scores are displayed here and are taken from the model
+ * @author wiler441
+ */
 public class ScoreButton extends Button {
 
 	private String myText;
@@ -29,15 +34,13 @@ public class ScoreButton extends Button {
 			}
 		}
 
-		fontSize = 50;
+		fontSize = 60;
 		setOnMouseClicked(event -> {
 			stateTextRoom = new stateTextRoom(model, myText, fontSize);
-
 			model.changeState(stateTextRoom);
 			Frame frame = new Frame(model);
 			model.getMain().setScene(new Scene(frame));
 
 		});
 	}
-
 }

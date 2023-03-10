@@ -7,10 +7,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.LinkedList;
-
 import javafx.stage.Stage;
 import myGraphics.Pictures;
 
+/**
+ * Stores values, states and enables reading of high score
+ * @author wiler441
+ */
 public class Model {
 
 	private Stage main;
@@ -19,8 +22,8 @@ public class Model {
 	private LinkedList<Long> highScores = new LinkedList<Long>();
 	private int amountOfScores = 5;
 	private File file;
-	private int frameHeight = 1000;
-	private int frameWidth = 1520;
+	private int frameHeight;
+	private int frameWidth;
 	private int TextButtonHeight = 194;
 	private int TextButtonWidth = 400;
 	private int textGroundWidth = 1520;
@@ -28,11 +31,15 @@ public class Model {
 
 	public Model(Stage arg0) {
 		readHighScores();
-		this.currentState = new stateMainMenu(this);
 		this.main = arg0;
-
+		this.frameHeight = (int) arg0.getHeight();
+		this.frameWidth = (int) arg0.getWidth();
+		this.currentState = new stateMainMenu(this);
 	}
 
+	/**
+	 * Reads the high-score, creates a new file if need be
+	 */
 	private void readHighScores() {
 		try {
 			this.file = new File("/home/wiler441/Documents/tdde10_project/Levels/highScores.txt");
@@ -47,32 +54,30 @@ public class Model {
 				}
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
+	/**
+	 * changes state
+	 */
+	public void changeState(stateOfGame nextState) {
+		currentState = nextState;
+	}
+	
+	/**
+	 * Getters and setters
+	 * @param Getters and setters
+	 */	
 	public Stage getMain() {
 		return main;
 	}
 
-	public void changeState(stateOfGame nextState) {
-
-		currentState.deactivate();
-		currentState = nextState;
-		currentState.activate();
-	}
-
 	public stateOfGame getCurrentState() {
 		return currentState;
-	}
-
-	public void update() {
-		currentState.update();
 	}
 
 	public Pictures getPictures() {
@@ -101,7 +106,6 @@ public class Model {
 
 	public int getFrameWidth() {
 		return frameWidth;
-
 	}
 
 	public int getTextButtonHeight() {

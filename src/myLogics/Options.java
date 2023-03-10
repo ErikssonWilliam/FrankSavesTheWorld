@@ -11,6 +11,10 @@ import myGraphics.StoryButton;
 
 import myGraphics.emptyRoom;
 
+/**
+ * Box that designs the options in the menu
+ * @author wiler441
+ */
 public class Options extends VBox {
 
 	public Options(Model model) throws FileNotFoundException {
@@ -35,5 +39,4 @@ public class Options extends VBox {
 
 		this.setStyle("-fx-background-color: #f2ca01;");
 	}
-
 }

@@ -2,6 +2,9 @@ package myLogics;
 
 import myGraphics.showResult;
 
+/*
+ * enables the state of results, 
+ */
 public class stateResult extends stateOfGame {
 
 	private showResult sR;
@@ -9,26 +12,10 @@ public class stateResult extends stateOfGame {
 	public stateResult(PlayRoom pr, Model model, Boolean win) {
 		super(model);
 		this.sR = new showResult(pr, model, win);
-
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void activate() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void deactivate() {
-		// TODO Auto-generated method stub
-
 	}
 
 	public showResult getSr() {

@@ -1,16 +1,19 @@
 package myGraphics;
 
 import java.io.FileNotFoundException;
-
 import javafx.scene.layout.VBox;
 import myLogics.Model;
 import myLogics.PlayRoom;
 
+/**
+ * Box that builds the result-screen
+ * @author wiler441
+ */
 public class showResult extends VBox {
 
 	public showResult(PlayRoom pr, Model model, Boolean win) {
 
-		this.setStyle("-fx-background-color: #f2ca01;");
+		this.setStyle("-fx-background-color: #2bcbfd;");
 
 		try {
 			GameResult gR = new GameResult(model, win);
@@ -23,6 +26,5 @@ public class showResult extends VBox {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-
 	}
 }

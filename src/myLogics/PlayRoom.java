@@ -4,6 +4,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import myGraphics.Frame;
 import myGraphics.GameView;
+import myLogics.PlayRoom.GridContent;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -11,8 +13,20 @@ import java.util.Scanner;
 
 import javafx.geometry.Point2D;
 
+/**
+ * Class that handles an active game that continuously
+ * gets updated. also handles certain game-deciding happenings.
+ * @author wiler441
+ *
+ */
 public class PlayRoom extends VBox {
 
+	/**
+	 * Uses public enums to efficiently transfer 
+	 * certain contents and directions within the package
+	 * @author wiler441
+	 *
+	 */
 	public enum GridContent {
 		EMPTY, FRANKSPAWN, WALL, NUKEKEY, DONE, ENEMY, FLASH, CAMERA, CONTROLPANEL, EMP
 	};
@@ -22,7 +36,6 @@ public class PlayRoom extends VBox {
 	};
 
 	private GridContent[][] grid;
-
 	private Point2D startLocation;
 	private GameView gameview;
 	private int rowCount = 25;
@@ -35,9 +48,6 @@ public class PlayRoom extends VBox {
 	private Model model;
 	private int empCount = 0;
 
-	public ArrayList<Enemy> getEnemies() {
-		return enemies;
-	}
 
 	public PlayRoom(Model model) {
 		this.setStyle("-fx-background-color: #add8e6;");
@@ -48,18 +58,24 @@ public class PlayRoom extends VBox {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-
 		this.getChildren().add(gameview);
-
 	}
 
+	/**
+	 * Starts a new game
+	 * @param LevelName
+	 */
 	public void StartNewGame(String LevelName) {
 		this.RenderLevel(LevelName);
 		this.frank = new Frank(startLocation);
 		gameview.initializeGrid();
-
 	}
 
+	/**
+	 * Renders a new level and assigns the correct content to correct spot
+	 * by reading a properly written game-design map 
+	 * @param LevelName
+	 */
 	public void RenderLevel(String LevelName) {
 
 		File myFile = new File(LevelName);
@@ -79,10 +95,8 @@ public class PlayRoom extends VBox {
 		}
 
 		grid = new GridContent[rowCount][columnCount];
-
 		int frankRow = 0;
-		int frankColumn = 0; // implementeras sen när vi läser av banan från en textfil, genom en if sats i
-								// for loopen nedan
+		int frankColumn = 0; 
 		int row = 0;
 
 		while (scanner2.hasNextLine()) {
@@ -93,7 +107,6 @@ public class PlayRoom extends VBox {
 			}
 
 			while (true) {
-
 				if (column == columnCount) {
 					break;
 				}
@@ -137,22 +150,14 @@ public class PlayRoom extends VBox {
 			}
 			row++;
 		}
-
 		startLocation = new Point2D(frankRow, frankColumn);
 	}
 
-	public void setGrid(GridContent[][] grid) {
-		this.grid = grid;
-	}
-
-	public Frank getFrank() {
-		return frank;
-	}
-
-	public GridContent[][] getGrid() {
-		return grid;
-	}
-
+	/**
+	 * handles movement in the game
+	 * @param direction
+	 * @return
+	 */
 	public Point2D changeVelocity(Directions direction) {
 		if (direction == Directions.WEST) {
 			return new Point2D(0, -1);
@@ -167,6 +172,10 @@ public class PlayRoom extends VBox {
 
 	}
 
+	/**
+	 * updates the game
+	 * @param sP
+	 */
 	public void update(statePlay sP) {
 		moveEnemies();
 		gameview.update(this);
@@ -178,35 +187,28 @@ public class PlayRoom extends VBox {
 		}
 	}
 
+	/** 
+	 * Checks if frank dies or uses (by default) the control panel
+	 */
 	private void statusofFrank() {
-		if (grid[(int) frank.getFrankLocation().getX()][(int) frank.getFrankLocation().getY()] == GridContent.FLASH) {
+		if (grid[(int) frank.getFrankLocation().getX()][(int) frank.getFrankLocation().getY()] == GridContent.FLASH ||	
+				grid[(int) frank.getFrankLocation().getX()][(int) frank.getFrankLocation().getY()] == GridContent.ENEMY ) {
 			try {
 				this.DisplayResult(false);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
-		} else if (grid[(int) frank.getFrankLocation().getX() - 1][(int) frank.getFrankLocation().getY()
-				- 1] == GridContent.CONTROLPANEL) {
+		} else if (grid[(int) frank.getFrankLocation().getX()-1 ][(int) frank.getFrankLocation().getY()
+				] == GridContent.CONTROLPANEL) {
 			for (int i = 0; i < cameras.size(); i++) {
 				cameras.get(i).killCam();
 			}
-		} else if (grid[(int) frank.getFrankLocation().getX()][(int) frank.getFrankLocation()
-				.getY()] == GridContent.CONTROLPANEL) {
-			for (int i = 0; i < cameras.size(); i++) {
-				cameras.get(i).killCam();
-			}
-
-		}
+		} 
 	}
 
-	public GridContent getCellValue(int row, int column) {
-		if (row >= 0 && row < this.grid.length && column >= 0 && column < this.grid[0].length) {
-			return this.grid[row][column];
-		} else {
-			return null;
-		}
-	}
-
+	/**
+	 * Handles the pick-up-able items by setting specific booleans in Frank
+	 */
 	public void giveFrank() {
 
 		if (this.getCellValue((int) frank.getFrankLocation().getX(),
@@ -218,9 +220,14 @@ public class PlayRoom extends VBox {
 			frank.setHasEMP(true);
 			grid[(int) frank.getFrankLocation().getX()][(int) frank.getFrankLocation().getY()] = GridContent.EMPTY;
 		}
-
 	}
 
+	/**
+	 * This method handles the potential win/loss of the game
+	 * and changes the state
+	 * @param win
+	 * @throws FileNotFoundException
+	 */
 	public void DisplayResult(Boolean win) throws FileNotFoundException {
 
 		model.changeState(new stateResult(this, model, win));
@@ -228,7 +235,12 @@ public class PlayRoom extends VBox {
 		model.getMain().setScene(new Scene(frame));
 	}
 
-	public void moveEnemies() { // Uppdaterar fiendernas rörelser
+	/**
+	 * Updates the enemies movement dependent on which type of enemy it is
+	 * Also handles the emp usage time to relate to the enemies movement 
+	 * since the emp only affects the enemies
+	 */
+	public void moveEnemies() {
 		updateCount += 1;
 		for (int i = 0; i < enemies.size(); i++) {
 			if (updateCount % 60 == 0 && enemies.get(i).getType() == "east") {
@@ -248,7 +260,32 @@ public class PlayRoom extends VBox {
 			frank.setUsedEMP(false);
 			frank.setHasEMP(false);
 		}
+	}
+	
+	/**
+	 * Getters & Setters
+	 */
+	public GridContent getCellValue(int row, int column) {
+		if (row >= 0 && row < this.grid.length && column >= 0 && column < this.grid[0].length) {
+			return this.grid[row][column];
+		} else {
+			return null;
+		}
+	}
+	
+	public void setGrid(GridContent[][] grid) {
+		this.grid = grid;
+	}
 
+	public Frank getFrank() {
+		return frank;
+	}
+
+	public GridContent[][] getGrid() {
+		return grid;
+	}
+	public ArrayList<Enemy> getEnemies() {
+		return enemies;
 	}
 
 	public Boolean getIsSecondLevel() {
@@ -258,11 +295,4 @@ public class PlayRoom extends VBox {
 	public void setIsSecondLevel(Boolean isSecondLevel) {
 		this.isSecondLevel = isSecondLevel;
 	}
-
-	public void useEmp() {
-		if (frank.getHasEMP()) {
-			frank.setUsedEMP(true);
-		}
-	}
-
 }

@@ -6,11 +6,15 @@ import javafx.geometry.Point2D;
 import myLogics.PlayRoom.Directions;
 import myLogics.PlayRoom.GridContent;
 
+/**
+ * Handles the moving Enemies in their respective directions.
+ * Also the deadly flashlight that depends on the enemy and walls
+ * @author wiler441
+ */
 public class Enemy {
 
 	private Point2D enemyLocation;
 	private Point2D startLocation;
-
 	private Directions enemyDirection;
 	private PlayRoom pr;
 	private int steps;
@@ -30,17 +34,13 @@ public class Enemy {
 		this.type = type;
 		this.flashLight = new ArrayList<Point2D>();
 		this.oldFlashLight = new ArrayList<Point2D>();
-
 	}
 
-	public Point2D getStartLocation() {
-		return startLocation;
-	}
-
-	public String getType() {
-		return type;
-	}
-
+	/**
+	 * Moves the enemy a certain steps in a certain direction, 
+	 * when steps reaches that certain amount the enemy goes in 
+	 * the opposite direction for the same amount of steps and so on 
+	 */
 	public void moveEnemy() {
 		if (stepCount == steps) {
 			enemyDirection = opposite(enemyDirection);
@@ -57,7 +57,6 @@ public class Enemy {
 		enemyLocation = futureEnemyLocation;
 		pr.getGrid()[(int) previousLocation.getX()][(int) previousLocation.getY()] = GridContent.EMPTY;
 		previousLocation = enemyLocation;
-
 		pr.getGrid()[(int) enemyLocation.getX()][(int) enemyLocation.getY()] = GridContent.ENEMY;
 		stepCount += 1;
 
@@ -66,13 +65,13 @@ public class Enemy {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-
 	}
 
-	public void setStepCount(int stepCount) {
-		this.stepCount = stepCount;
-	}
-
+	/**
+	 * Continuously creates a deadly flashlight for the said enemy
+	 * @param enemyLocation
+	 * @throws FileNotFoundException
+	 */
 	public void flashLight(Point2D enemyLocation) throws FileNotFoundException {
 
 		removePreviousFlash(oldFlashLight);
@@ -97,6 +96,12 @@ public class Enemy {
 		oldFlashLight = flashLight;
 	}
 
+	/**
+	 * Removes the previous flashlight
+	 * Is for example needed when changing direction
+	 * and isn't included in the method above cause of walls
+	 * @param oldFlashLight
+	 */
 	private void removePreviousFlash(ArrayList<Point2D> oldFlashLight) {
 
 		for (int i = 0; i < oldFlashLight.size(); i++) {
@@ -111,14 +116,11 @@ public class Enemy {
 		}
 	}
 
-	public Point2D getEnemyLocation() {
-		return enemyLocation;
-	}
-
-	public void setEnemyLocation(Point2D enemyLocation) {
-		this.enemyLocation = enemyLocation;
-	}
-
+	/**
+	 * Returns the opposite direction
+	 * @param direction
+	 * @return
+	 */
 	public Directions opposite(Directions direction) {
 		Directions oppDirection = null;
 		if (direction == Directions.WEST) {
@@ -133,5 +135,28 @@ public class Enemy {
 		return oppDirection;
 
 	}
+	
+	/**
+	 * Getters and setters
+	 * @param stepCount
+	 */
+	public void setStepCount(int stepCount) {
+		this.stepCount = stepCount;
+	}
+	
+	public Point2D getStartLocation() {
+		return startLocation;
+	}
 
+	public String getType() {
+		return type;
+	}
+
+	public Point2D getEnemyLocation() {
+		return enemyLocation;
+	}
+
+	public void setEnemyLocation(Point2D enemyLocation) {
+		this.enemyLocation = enemyLocation;
+	}
 }

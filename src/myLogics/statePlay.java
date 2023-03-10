@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.Collections;
-
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -14,22 +13,24 @@ import myGraphics.Frame;
 import myGraphics.GameResult;
 import myLogics.PlayRoom.GridContent;
 
+/**
+ * Enables the state of game (playroom) and certain operations 
+ * that do not belong in a specific game.
+ * Also changes level
+ * @author wiler441
+ */
 public class statePlay extends stateOfGame {
 
 	private PlayRoom pr;
 	private GameResult gR;
 	private long startTime;
-	private static final String[] levelArray = { "/home/wiler441/Documents/tdde10_project/Levels/firstLevel.txt",
+	private static final String[] levelArray = { 
+			"/home/wiler441/Documents/tdde10_project/Levels/firstLevel.txt",
 			"/home/wiler441/Documents/tdde10_project/Levels/secondLevel.txt" };
-
-	public String getLevel(int index) {
-		return levelArray[index];
-	}
 
 	public statePlay(Model model) {
 		super(model);
 		this.pr = new PlayRoom(model);
-
 	}
 
 	public void initialize() {
@@ -40,10 +41,15 @@ public class statePlay extends stateOfGame {
 		} else {
 			index = 1;
 		}
-		
 		pr.StartNewGame(this.getLevel(index));
 	}
 
+	/**
+	 * Records time and sends this to model & or new text file High scores remove
+	 * once reached a certain cap decided in model might be models responsibility
+	 * 
+	 * @param start
+	 */
 	private void recordTime(Boolean start) {
 		if (start) {
 			startTime = System.nanoTime();
@@ -51,8 +57,9 @@ public class statePlay extends stateOfGame {
 			long score = (System.nanoTime() - startTime) / 1000000000;
 			model.getHighScores().add(score);
 			Collections.sort(model.getHighScores());
-			model.getHighScores().remove(model.getAmountOfScores());
-
+			if (model.getHighScores().size() > model.getAmountOfScores()) {
+				model.getHighScores().remove(model.getAmountOfScores());
+			}
 			try {
 				ObjectOutputStream outStream = new ObjectOutputStream(new FileOutputStream(model.getFile()));
 				outStream.writeObject(model.getHighScores());
@@ -63,17 +70,15 @@ public class statePlay extends stateOfGame {
 
 	}
 
+	/**
+	 * The following 2 methods handles keycodes from keyboard in game
+	 */
 	public void keyIntake() {
 		model.getMain().getScene().setOnKeyPressed(new EventHandler<KeyEvent>() {
-
 			public void handle(KeyEvent keyEvent) {
 				keyPressed(keyEvent);
 			}
 		});
-	}
-
-	public PlayRoom getPr() {
-		return pr;
 	}
 
 	@Override
@@ -89,11 +94,15 @@ public class statePlay extends stateOfGame {
 		} else if (key.getCode() == KeyCode.E) {
 			pr.giveFrank();
 		} else if (key.getCode() == KeyCode.U) {
-			pr.useEmp();
+			pr.getFrank().useEmp();
 		}
-
 	}
 
+	/**
+	 * Changes levels, either to second map or if you win
+	 * 
+	 * @throws FileNotFoundException
+	 */
 	public void ChangeLevel() throws FileNotFoundException {
 
 		if ((pr.getCellValue((int) pr.getFrank().getFrankLocation().getX(),
@@ -106,29 +115,30 @@ public class statePlay extends stateOfGame {
 			} else {
 				pr.getEnemies().clear();
 				pr.setIsSecondLevel(true);
+				pr.getFrank().setUsedEMP(false);
 				initialize();
 			}
 		}
 	}
 
-	public GameResult getgR() {
-		return gR;
-	}
-
+	/**
+	 * Updates the game
+	 */
 	@Override
 	public void update() {
 		pr.update(this);
 
 	}
 
-	@Override
-	public void activate() {
-
+	public GameResult getgR() {
+		return gR;
 	}
 
-	@Override
-	public void deactivate() {
-
+	public PlayRoom getPr() {
+		return pr;
 	}
 
+	public String getLevel(int index) {
+		return levelArray[index];
+	}
 }

@@ -2,9 +2,12 @@ package myGraphics;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-
 import javafx.scene.image.Image;
 
+/**
+ * Buffers the pictures of which are used in the different states except the game
+ * @author wiler441
+ */
 public class Pictures {
 	private Image playButton;
 	private Image storyButton;
@@ -27,16 +30,19 @@ public class Pictures {
 					new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/scorebutton.png"));
 			returnButton = new Image(
 					new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/returnbutton.png"));
-			logo = new Image(new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/logo.png"));
+			logo = new Image(
+					new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/logo.png"));
 			exitButton = new Image(
 					new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/exitbutton.png"));
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 
+	/**
+	 * Getters and setters
+	 * @return
+	 */
 	public Image getExitButton() {
 		return exitButton;
 	}

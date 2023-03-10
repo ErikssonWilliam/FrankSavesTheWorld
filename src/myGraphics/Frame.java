@@ -7,6 +7,10 @@ import myLogics.statePlay;
 import myLogics.stateResult;
 import myLogics.stateTextRoom;
 
+/**
+ * Updates the frame depending on the current state
+ * @author wiler441
+ */
 public class Frame extends HBox {
 
 	public Frame(Model model) {
@@ -21,5 +25,4 @@ public class Frame extends HBox {
 			this.getChildren().add(model.getCurrentState().getSr());
 		}
 	}
-
 }

@@ -1,12 +1,14 @@
 package myGraphics;
 
 import java.io.FileNotFoundException;
-
 import javafx.scene.Scene;
-
 import myLogics.Model;
 import myLogics.statePlay;
 
+/**
+ * Starts the game when clicked
+ * @author wiler441
+ */
 public class PlayButton extends Button {
 
 	private statePlay playstate;
@@ -23,10 +25,9 @@ public class PlayButton extends Button {
 			Scene scene = new Scene(frame);
 			model.getMain().setScene(scene);
 
-			playstate.initialize(); // Skapa våran bana
+			playstate.initialize(); 
 			playstate.update();
 			playstate.keyIntake();
 		});
-
 	}
 }
