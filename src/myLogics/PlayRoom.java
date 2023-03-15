@@ -38,7 +38,11 @@ public class PlayRoom extends VBox {
 	 * Could list the cameras and enemies under a superclass and thereby 
 	 * a common arraylist, but in this case we decided not to. The classes
 	 * of Enemy and Camera does not have much in common. Would be smart 
-	 * when implementing more enemies (can kill Frank).
+	 * when implementing more enemies (can kill Frank). The same thing 
+	 * applies to controlpanel. But since Frank can't pick up this powerup
+	 * we decided not to include this in an array of objects, since a lot 
+	 * of empty classes would be made. But this is certainly an option when 
+	 * implementing more objects
 	 */
 	private GridContent[][] grid;
 	private Point2D startLocation;
@@ -47,12 +51,14 @@ public class PlayRoom extends VBox {
 	private int columnCount = 38;
 	private Frank frank;
 	private Boolean isSecondLevel = false;
-	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
-	private ArrayList<Camera> cameras = new ArrayList<Camera>();
 	private int updateCount = 0;
 	private Model model;
 	private int empCount = 0;
 	private boolean activeEMP = false;
+	
+	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+	private ArrayList<Camera> cameras = new ArrayList<Camera>();
+	private ArrayList<ControlPanel> cPanels = new ArrayList<ControlPanel>();
 
 
 	public PlayRoom(Model model) {
@@ -84,7 +90,7 @@ public class PlayRoom extends VBox {
 	 */
 	public void RenderLevel(String LevelName) {
 
-		File myFile = new File(LevelName);
+		File myFile = new File(LevelName);	
 		Scanner scanner1 = null;
 
 		try {
@@ -129,6 +135,8 @@ public class PlayRoom extends VBox {
 					thisValue = GridContent.DONE;
 				} else if (readRow.charAt(column) == 'P') {
 					thisValue = GridContent.CONTROLPANEL;
+					ControlPanel cPanel = new ControlPanel(new Point2D(row, column), this);
+					cPanels.add(cPanel);
 				} else if (readRow.charAt(column) == 'e') {
 					thisValue = GridContent.EMP;
 				} else if (readRow.charAt(column) == 'C') {
@@ -193,7 +201,7 @@ public class PlayRoom extends VBox {
 	}
 
 	/** 
-	 * Checks if frank dies or uses (by default) the control panel
+	 * Checks if frank dies or uses (by default) the control panel by updating the cPanel
 	 */
 	private void statusofFrank() {
 		if (grid[(int) frank.getFrankLocation().getX()][(int) frank.getFrankLocation().getY()] == GridContent.FLASH ||	
@@ -203,12 +211,10 @@ public class PlayRoom extends VBox {
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
-		} else if (grid[(int) frank.getFrankLocation().getX()-1 ][(int) frank.getFrankLocation().getY()
-				] == GridContent.CONTROLPANEL) {
-			for (int i = 0; i < cameras.size(); i++) {
-				cameras.get(i).killCam();
-			}
-		} 
+		}
+		for (int i = 0; i < cPanels.size(); ++i) {
+			cPanels.get(i).update();
+		}
 	}
 
 	/**
@@ -307,5 +313,9 @@ public class PlayRoom extends VBox {
 
 	public void setIsSecondLevel(Boolean isSecondLevel) {
 		this.isSecondLevel = isSecondLevel;
+	}
+
+	public ArrayList<Camera> getCameras() {
+		return cameras;
 	}
 }
