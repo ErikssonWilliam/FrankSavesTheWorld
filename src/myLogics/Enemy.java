@@ -75,8 +75,9 @@ public class Enemy {
 	public void flashLight(Point2D enemyLocation) throws FileNotFoundException {
 
 		removePreviousFlash(oldFlashLight);
-		if (!pr.getFrank().getUsedEMP()) {
 
+
+		if (!pr.isActiveEMP()) {
 			for (int i = 0; i < 3; i++) {
 				if (enemyDirection == Directions.WEST) {
 					flashLight.add(i, enemyLocation.add(0, -i - 1));

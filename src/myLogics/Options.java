@@ -8,8 +8,7 @@ import myGraphics.HelpButton;
 import myGraphics.PlayButton;
 import myGraphics.ScoreButton;
 import myGraphics.StoryButton;
-
-import myGraphics.emptyRoom;
+import myGraphics.EmptyRoom;
 
 /**
  * Box that designs the options in the menu
@@ -34,8 +33,8 @@ public class Options extends VBox {
 		ExitButton myEB = new ExitButton(model);
 		this.getChildren().add(myEB);
 
-		emptyRoom myEp = new emptyRoom(model);
-		this.getChildren().add(myEp);
+		EmptyRoom myEr = new EmptyRoom(model);
+		this.getChildren().add(myEr);
 
 		this.setStyle("-fx-background-color: #f2ca01;");
 	}

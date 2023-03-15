@@ -9,7 +9,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import myGraphics.Frame;
+import javafx.scene.layout.HBox;
 import myGraphics.GameResult;
 import myLogics.PlayRoom.GridContent;
 
@@ -19,18 +19,19 @@ import myLogics.PlayRoom.GridContent;
  * Also changes level
  * @author wiler441
  */
-public class statePlay extends stateOfGame {
+public class PlayState{
 
 	private PlayRoom pr;
+	private Model model;
 	private GameResult gR;
 	private long startTime;
 	private static final String[] levelArray = { 
 			"/home/wiler441/Documents/tdde10_project/Levels/firstLevel.txt",
 			"/home/wiler441/Documents/tdde10_project/Levels/secondLevel.txt" };
 
-	public statePlay(Model model) {
-		super(model);
+	public PlayState(Model model) {
 		this.pr = new PlayRoom(model);
+		this.model = model;
 	}
 
 	public void initialize() {
@@ -81,12 +82,11 @@ public class statePlay extends stateOfGame {
 		});
 	}
 
-	@Override
 	public void keyPressed(KeyEvent key) {
 
 		if (key.getCode() == KeyCode.ESCAPE) {
-			model.changeState(new stateMainMenu(model));
-			Frame frame = new Frame(model);
+			HBox frame = new HBox();
+			frame.getChildren().add(new MainMenu(model));
 			model.getMain().setScene(new Scene(frame));
 		} else if (key.getCode() == KeyCode.LEFT || key.getCode() == KeyCode.UP || key.getCode() == KeyCode.RIGHT
 				|| key.getCode() == KeyCode.DOWN) {
@@ -107,7 +107,7 @@ public class statePlay extends stateOfGame {
 
 		if ((pr.getCellValue((int) pr.getFrank().getFrankLocation().getX(),
 				(int) pr.getFrank().getFrankLocation().getY()) == GridContent.DONE)
-				&& pr.getFrank().getHasNuclearCode()) {
+				&& pr.getFrank().hasNuclearKey()) {
 
 			if (pr.getIsSecondLevel()) {
 				this.recordTime(false);
@@ -124,10 +124,8 @@ public class statePlay extends stateOfGame {
 	/**
 	 * Updates the game
 	 */
-	@Override
 	public void update() {
 		pr.update(this);
-
 	}
 
 	public GameResult getgR() {

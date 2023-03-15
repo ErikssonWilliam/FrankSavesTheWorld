@@ -12,9 +12,9 @@ import myLogics.Model;
  * @author wiler441
  *
  */
-public class emptyRoom extends Button {
+public class EmptyRoom extends Button {
 
-	public emptyRoom(Model model) throws FileNotFoundException {
+	public EmptyRoom(Model model) throws FileNotFoundException {
 		super(model);
 		Image background = new Image(
 				new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/background.png"));

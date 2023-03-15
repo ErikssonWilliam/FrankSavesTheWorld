@@ -1,16 +1,14 @@
 package myLogics;
 
 import javafx.scene.Scene;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import myGraphics.Frame;
 import myGraphics.GameView;
-import myLogics.PlayRoom.GridContent;
-
+import myGraphics.showResult;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
-
 import javafx.geometry.Point2D;
 
 /**
@@ -35,6 +33,13 @@ public class PlayRoom extends VBox {
 		NORTH, EAST, SOUTH, WEST, STAY
 	};
 
+	/**
+	 * Uses a grid.
+	 * Could list the cameras and enemies under a superclass and thereby 
+	 * a common arraylist, but in this case we decided not to. The classes
+	 * of Enemy and Camera does not have much in common. Would be smart 
+	 * when implementing more enemies (can kill Frank).
+	 */
 	private GridContent[][] grid;
 	private Point2D startLocation;
 	private GameView gameview;
@@ -47,6 +52,7 @@ public class PlayRoom extends VBox {
 	private int updateCount = 0;
 	private Model model;
 	private int empCount = 0;
+	private boolean activeEMP = false;
 
 
 	public PlayRoom(Model model) {
@@ -169,19 +175,18 @@ public class PlayRoom extends VBox {
 			return new Point2D(1, 0);
 		} else
 			return new Point2D(0, 0);
-
 	}
 
 	/**
 	 * updates the game
 	 * @param sP
 	 */
-	public void update(statePlay sP) {
+	public void update(PlayState pS) {
 		moveEnemies();
 		gameview.update(this);
 		statusofFrank();
 		try {
-			sP.ChangeLevel();
+			pS.ChangeLevel();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -213,11 +218,11 @@ public class PlayRoom extends VBox {
 
 		if (this.getCellValue((int) frank.getFrankLocation().getX(),
 				(int) frank.getFrankLocation().getY()) == GridContent.NUKEKEY) {
-			frank.setHasNuclearCode(true);
+			frank.getItems().add(new NukeKey());
 			grid[(int) frank.getFrankLocation().getX()][(int) frank.getFrankLocation().getY()] = GridContent.EMPTY;
 		} else if (this.getCellValue((int) frank.getFrankLocation().getX(),
 				(int) frank.getFrankLocation().getY()) == GridContent.EMP) {
-			frank.setHasEMP(true);
+			frank.getItems().add(new EMP(this));
 			grid[(int) frank.getFrankLocation().getX()][(int) frank.getFrankLocation().getY()] = GridContent.EMPTY;
 		}
 	}
@@ -229,10 +234,11 @@ public class PlayRoom extends VBox {
 	 * @throws FileNotFoundException
 	 */
 	public void DisplayResult(Boolean win) throws FileNotFoundException {
-
-		model.changeState(new stateResult(this, model, win));
-		Frame frame = new Frame(model);
+		
+		HBox frame = new HBox();
+		frame.getChildren().add(new showResult(this, model, win));
 		model.getMain().setScene(new Scene(frame));
+		model.setPlayState(null);
 	}
 
 	/**
@@ -253,12 +259,11 @@ public class PlayRoom extends VBox {
 				enemies.get(i).moveEnemy();
 			}
 		}
-		if (frank.getUsedEMP()) {
+		if (activeEMP) {
 			empCount += 1;
 		}
 		if (empCount == 400) {
-			frank.setUsedEMP(false);
-			frank.setHasEMP(false);
+			activeEMP = false;
 		}
 	}
 	
@@ -273,6 +278,14 @@ public class PlayRoom extends VBox {
 		}
 	}
 	
+	public boolean isActiveEMP() {
+		return activeEMP;
+	}
+
+	public void setActiveEMP(boolean activeEMP) {
+		this.activeEMP = activeEMP;
+	}
+
 	public void setGrid(GridContent[][] grid) {
 		this.grid = grid;
 	}

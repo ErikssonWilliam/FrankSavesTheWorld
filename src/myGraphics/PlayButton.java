@@ -2,8 +2,10 @@ package myGraphics;
 
 import java.io.FileNotFoundException;
 import javafx.scene.Scene;
+import javafx.scene.layout.HBox;
 import myLogics.Model;
-import myLogics.statePlay;
+import myLogics.PlayState;
+
 
 /**
  * Starts the game when clicked
@@ -11,7 +13,6 @@ import myLogics.statePlay;
  */
 public class PlayButton extends Button {
 
-	private statePlay playstate;
 
 	public PlayButton(Model model) throws FileNotFoundException {
 		super(model);
@@ -19,12 +20,12 @@ public class PlayButton extends Button {
 
 		setOnMouseClicked(event -> {
 
-			playstate = new statePlay(model);
-			model.changeState(playstate);
-			Frame frame = new Frame(model);
-			Scene scene = new Scene(frame);
-			model.getMain().setScene(scene);
-
+			PlayState playstate = new PlayState(model);
+			model.setPlayState(playstate);
+			HBox frame = new HBox();
+			frame.getChildren().add(model.getPlayState().getPr());
+			model.getMain().setScene(new Scene(frame));
+			
 			playstate.initialize(); 
 			playstate.update();
 			playstate.keyIntake();

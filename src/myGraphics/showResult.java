@@ -18,7 +18,7 @@ public class showResult extends VBox {
 		try {
 			GameResult gR = new GameResult(model, win);
 			ReturnButton myRB = new ReturnButton(model);
-			emptyRoom myEr = new emptyRoom(model);
+			EmptyRoom myEr = new EmptyRoom(model);
 
 			this.getChildren().add(gR);
 			this.getChildren().add(myRB);

@@ -12,12 +12,15 @@ import myGraphics.Pictures;
 
 /**
  * Stores values, states and enables reading of high score
+ * Follows the entire program.
+ * [KOMP] Removed currentstate and Frame since it didn't actually
+ * refer to effective code.
  * @author wiler441
  */
 public class Model {
 
 	private Stage main;
-	private stateOfGame currentState;
+	private PlayState playState;
 	private Pictures pictures = new Pictures();
 	private LinkedList<Long> highScores = new LinkedList<Long>();
 	private int amountOfScores = 5;
@@ -34,7 +37,6 @@ public class Model {
 		this.main = arg0;
 		this.frameHeight = (int) arg0.getHeight();
 		this.frameWidth = (int) arg0.getWidth();
-		this.currentState = new stateMainMenu(this);
 	}
 
 	/**
@@ -62,22 +64,22 @@ public class Model {
 	}
 
 	/**
-	 * changes state
+	 * Starts the PlayState
 	 */
-	public void changeState(stateOfGame nextState) {
-		currentState = nextState;
+	public void setPlayState(PlayState playState) {
+		this.playState = playState;
 	}
 	
 	/**
 	 * Getters and setters
 	 * @param Getters and setters
 	 */	
+	public PlayState getPlayState() {
+		return playState;
+	}
+	
 	public Stage getMain() {
 		return main;
-	}
-
-	public stateOfGame getCurrentState() {
-		return currentState;
 	}
 
 	public Pictures getPictures() {

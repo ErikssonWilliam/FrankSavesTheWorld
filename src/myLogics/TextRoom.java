@@ -1,11 +1,10 @@
 package myLogics;
 
 import java.io.FileNotFoundException;
-
 import javafx.scene.layout.VBox;
 import myGraphics.ReturnButton;
 import myGraphics.TextGround;
-import myGraphics.emptyRoom;
+import myGraphics.EmptyRoom;
 
 /**
  * The Box/design of the Textroom
@@ -19,7 +18,7 @@ public class TextRoom extends VBox {
 
 		ReturnButton rB = new ReturnButton(model);
 		TextGround text = new TextGround(model, myText, fontSize);
-		emptyRoom eR = new emptyRoom(model);
+		EmptyRoom eR = new EmptyRoom(model);
 
 		this.getChildren().add(text);
 		this.getChildren().add(rB);

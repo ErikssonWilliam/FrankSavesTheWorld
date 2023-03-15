@@ -1,11 +1,13 @@
 package myGraphics;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.HBox;
 import myLogics.Model;
-import myLogics.stateTextRoom;
+import myLogics.TextRoom;
 
 /**
  * Writes and activates the scores in the textroom when clicked in the menu
@@ -15,7 +17,6 @@ import myLogics.stateTextRoom;
 public class ScoreButton extends Button {
 
 	private String myText;
-	private stateTextRoom stateTextRoom;
 	private GraphicsContext gc = getGraphicsContext2D();
 	private ArrayList<String> scores = new ArrayList<String>();
 	private int fontSize;
@@ -36,11 +37,13 @@ public class ScoreButton extends Button {
 
 		fontSize = 60;
 		setOnMouseClicked(event -> {
-			stateTextRoom = new stateTextRoom(model, myText, fontSize);
-			model.changeState(stateTextRoom);
-			Frame frame = new Frame(model);
-			model.getMain().setScene(new Scene(frame));
-
+			HBox frame = new HBox();
+			try {
+				frame.getChildren().add(new TextRoom(model, myText, fontSize));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			model.getMain().setScene(new Scene(frame));	
 		});
 	}
 }

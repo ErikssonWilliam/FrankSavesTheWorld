@@ -1,5 +1,6 @@
 package myLogics;
 
+import java.util.ArrayList;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import myLogics.PlayRoom.Directions;
@@ -7,17 +8,21 @@ import myLogics.PlayRoom.GridContent;
 
 /**
  * Frank handles the certain aspects of the object Frank.
- * Location, movement, emp-usage & nuclearkey
+ * Location, movement, emp-usage & items. Powerup EMP
+ * [KOMP]: implemented items.
  * @author wiler441
  */
 public class Frank {
 
-	private Boolean hasNuclearCode = false;
-	private Boolean hasEMP = false;
 	private Boolean usedEMP = false;
 	private Point2D frankLocation;
 	private Point2D frankVelocity;
 	private Point2D previousLocation;
+	
+	/**
+	 * Items that Frank can pick up during the game. 
+	 */
+	private ArrayList<Item> items = new ArrayList<Item>();
     
 	public Frank(Point2D startLocation) {
 		this.frankLocation = startLocation;
@@ -58,29 +63,38 @@ public class Frank {
 	 * Handles the emp-usage
 	 */
 	public void useEmp() {
-		if (getHasEMP()) {
-			setUsedEMP(true);
-		}
+		for (int i = 0; i < items.size(); i++) {
+			if (items.get(i) instanceof EMP) {
+				items.get(i).use();
+				items.set(i, null);
+				break;
+			}
+		}	
+	}
+	
+	/**
+	 * Checks if Frank has the NuclearKey
+	 * @return
+	 */
+	public boolean hasNuclearKey() {
+		for (int i=0; i< items.size(); i++) {
+			if (items.get(i) instanceof NukeKey) {
+		      return true;
+			}
+	}
+		return false;
 	}
 		
 	/**
 	 * Getters and setters
 	 * @return
 	 */
-	public Boolean getHasEMP() {
-		return hasEMP;
+	public ArrayList<Item> getItems() {
+		return items;
 	}
 
-	public void setHasEMP(Boolean hasEMP) {
-		this.hasEMP = hasEMP;
-	}
-
-	public Boolean getHasNuclearCode() {
-		return hasNuclearCode;
-	}
-
-	public void setHasNuclearCode(Boolean hasNuclearCode) {
-		this.hasNuclearCode = hasNuclearCode;
+	public void setItems(ArrayList<Item> items) {
+		this.items = items;
 	}
 
 	public Point2D getFrankLocation() {
