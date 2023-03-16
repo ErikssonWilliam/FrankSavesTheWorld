@@ -53,13 +53,10 @@ public class PlayRoom extends VBox {
 	private Boolean isSecondLevel = false;
 	private int updateCount = 0;
 	private Model model;
-	private int empCount = 0;
-	private boolean activeEMP = false;
-	
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	private ArrayList<Camera> cameras = new ArrayList<Camera>();
 	private ArrayList<ControlPanel> cPanels = new ArrayList<ControlPanel>();
-
+	private ArrayList<Item> items = new ArrayList<Item>();
 
 	public PlayRoom(Model model) {
 		this.setStyle("-fx-background-color: #add8e6;");
@@ -76,8 +73,9 @@ public class PlayRoom extends VBox {
 	/**
 	 * Starts a new game
 	 * @param LevelName
+	 * @throws FileNotFoundException 
 	 */
-	public void StartNewGame(String LevelName) {
+	public void StartNewGame(String LevelName) throws FileNotFoundException {
 		this.RenderLevel(LevelName);
 		this.frank = new Frank(startLocation);
 		gameview.initializeGrid();
@@ -87,8 +85,9 @@ public class PlayRoom extends VBox {
 	 * Renders a new level and assigns the correct content to correct spot
 	 * by reading a properly written game-design map 
 	 * @param LevelName
+	 * @throws FileNotFoundException 
 	 */
-	public void RenderLevel(String LevelName) {
+	public void RenderLevel(String LevelName) throws FileNotFoundException {
 
 		File myFile = new File(LevelName);	
 		Scanner scanner1 = null;
@@ -131,6 +130,7 @@ public class PlayRoom extends VBox {
 					frankColumn = column;
 				} else if (readRow.charAt(column) == 'N') {
 					thisValue = GridContent.NUKEKEY;
+					items.add(new NukeKey(new Point2D(row, column), this));
 				} else if (readRow.charAt(column) == 'D') {
 					thisValue = GridContent.DONE;
 				} else if (readRow.charAt(column) == 'P') {
@@ -139,6 +139,7 @@ public class PlayRoom extends VBox {
 					cPanels.add(cPanel);
 				} else if (readRow.charAt(column) == 'e') {
 					thisValue = GridContent.EMP;
+					items.add(new EMP(this, new Point2D(row, column)));
 				} else if (readRow.charAt(column) == 'C') {
 					thisValue = GridContent.CAMERA;
 					Camera camera = new Camera(new Point2D(row, column), this);
@@ -191,13 +192,34 @@ public class PlayRoom extends VBox {
 	 */
 	public void update(PlayState pS) {
 		moveEnemies();
-		gameview.update(this);
+		updateView();
 		statusofFrank();
 		try {
 			pS.ChangeLevel();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+	}
+
+	/*'
+	 * Updateview updates the view of the playing board
+	 * as well as the objects in the game.
+	 */
+	private void updateView() {
+		gameview.update(this);
+		for (Enemy enemy : enemies) {
+			enemy.drawYourself();
+		}
+		for (Camera camera : cameras) {
+			camera.drawYourself();
+		}
+		for (ControlPanel cpanel : cPanels) {
+			cpanel.drawYourself();
+		}
+		for (Item item : items) {
+			item.drawYourself();
+		}
+		frank.drawYourself(this);
 	}
 
 	/** 
@@ -218,19 +240,26 @@ public class PlayRoom extends VBox {
 	}
 
 	/**
-	 * Handles the pick-up-able items by setting specific booleans in Frank
+	 * Handles the pick-up-able items for Frank
 	 */
 	public void giveFrank() {
 
 		if (this.getCellValue((int) frank.getFrankLocation().getX(),
-				(int) frank.getFrankLocation().getY()) == GridContent.NUKEKEY) {
-			frank.getItems().add(new NukeKey());
-			grid[(int) frank.getFrankLocation().getX()][(int) frank.getFrankLocation().getY()] = GridContent.EMPTY;
-		} else if (this.getCellValue((int) frank.getFrankLocation().getX(),
-				(int) frank.getFrankLocation().getY()) == GridContent.EMP) {
-			frank.getItems().add(new EMP(this));
-			grid[(int) frank.getFrankLocation().getX()][(int) frank.getFrankLocation().getY()] = GridContent.EMPTY;
+				(int) frank.getFrankLocation().getY()) == GridContent.NUKEKEY
+				|| this.getCellValue((int) frank.getFrankLocation().getX(),
+						(int) frank.getFrankLocation().getY()) == GridContent.EMP) {
+			for (Item item : items) {
+				if (frank.getFrankLocation().getX() == item.getLocation().getX()
+						&& frank.getFrankLocation().getY() == item.getLocation().getY()) {
+					frank.getItems().add(item);
+					items.remove(items.indexOf(item));
+					grid[(int) frank.getFrankLocation().getX()][(int) frank.getFrankLocation()
+							.getY()] = GridContent.EMPTY;
+					break;
+				}
+			}
 		}
+
 	}
 
 	/**
@@ -265,13 +294,8 @@ public class PlayRoom extends VBox {
 				enemies.get(i).moveEnemy();
 			}
 		}
-		if (activeEMP) {
-			empCount += 1;
-		}
-		if (empCount == 400) {
-			activeEMP = false;
-		}
 	}
+	
 	
 	/**
 	 * Getters & Setters
@@ -284,14 +308,6 @@ public class PlayRoom extends VBox {
 		}
 	}
 	
-	public boolean isActiveEMP() {
-		return activeEMP;
-	}
-
-	public void setActiveEMP(boolean activeEMP) {
-		this.activeEMP = activeEMP;
-	}
-
 	public void setGrid(GridContent[][] grid) {
 		this.grid = grid;
 	}
@@ -318,4 +334,9 @@ public class PlayRoom extends VBox {
 	public ArrayList<Camera> getCameras() {
 		return cameras;
 	}
+
+	public GameView getGameview() {
+		return gameview;
+	}
+	
 }

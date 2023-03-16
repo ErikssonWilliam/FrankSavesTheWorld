@@ -1,6 +1,10 @@
 package myLogics;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 import javafx.geometry.Point2D;
+import javafx.scene.image.Image;
 import myLogics.PlayRoom.GridContent;
 
 /**
@@ -10,11 +14,14 @@ import myLogics.PlayRoom.GridContent;
  */
 public class Camera {
 	private Point2D location;
-	private PlayRoom pr;
+	private PlayRoom pR;
+	private Image camera;
 
-	public Camera(Point2D location, PlayRoom pr) {
+	public Camera(Point2D location, PlayRoom pR) throws FileNotFoundException {
 		this.location = location;
-		this.pr = pr;
+		this.pR = pR;
+		this.camera = new Image(
+				new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/camera.png"));
 	}
 
 	/**
@@ -23,7 +30,7 @@ public class Camera {
 	public void initializeCam() {
 		for (int row = -1; row < 1; row++) {
 			for (int column = -3; column < 0; column++) {
-				pr.getGrid()[(int) location.getX() + row][(int) location.getY() + column] = GridContent.FLASH;
+				pR.getGrid()[(int) location.getX() + row][(int) location.getY() + column] = GridContent.FLASH;
 			}
 		}
 	}
@@ -31,8 +38,13 @@ public class Camera {
 	public void killCam() {
 		for (int row = -1; row < 1; row++) {
 			for (int column = -3; column < 0; column++) {
-				pr.getGrid()[(int) location.getX() + row][(int) location.getY() + column] = GridContent.EMPTY;
+				pR.getGrid()[(int) location.getX() + row][(int) location.getY() + column] = GridContent.EMPTY;
 			}
 		}
 	}
+
+	public void drawYourself() {
+		pR.getGameview().getGridViews()[(int) location.getX()][(int) location.getY()].setImage(camera);
+	}
+
 }

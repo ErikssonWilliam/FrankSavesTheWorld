@@ -1,7 +1,10 @@
 package myLogics;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import javafx.geometry.Point2D;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import myLogics.PlayRoom.Directions;
 import myLogics.PlayRoom.GridContent;
@@ -18,14 +21,18 @@ public class Frank {
 	private Point2D frankLocation;
 	private Point2D frankVelocity;
 	private Point2D previousLocation;
+	private Image frank;
 	
 	/**
 	 * Items that Frank can pick up during the game. 
 	 */
 	private ArrayList<Item> items = new ArrayList<Item>();
     
-	public Frank(Point2D startLocation) {
+	public Frank(Point2D startLocation) throws FileNotFoundException {
 		this.frankLocation = startLocation;
+		this.frank = new Image(
+				new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/Frank1.png"));
+
 	}
 
 	/**
@@ -33,7 +40,7 @@ public class Frank {
 	 * @param key
 	 * @param pr
 	 */
-	public void moveTo(KeyCode key, PlayRoom pr) {
+	public void moveTo(KeyCode key, PlayRoom pR) {
 		
 		Directions direction = Directions.STAY;		
 		if (key == KeyCode.UP) {
@@ -46,12 +53,12 @@ public class Frank {
 			direction = Directions.WEST;
 		}
 		
-		Point2D futurefrankVelocity = pr.changeVelocity(direction);
+		Point2D futurefrankVelocity = pR.changeVelocity(direction);
 		Point2D futurefrankLocation = frankLocation.add(futurefrankVelocity);
 		
-		if (pr.getGrid()[(int) futurefrankLocation.getX()][(int) futurefrankLocation.getY()] == GridContent.WALL || 
-				pr.getGrid()[(int) futurefrankLocation.getX()][(int) futurefrankLocation.getY()] == GridContent.CAMERA ||
-				pr.getGrid()[(int) futurefrankLocation.getX()][(int) futurefrankLocation.getY()] == GridContent.CONTROLPANEL ) {
+		if (pR.getGrid()[(int) futurefrankLocation.getX()][(int) futurefrankLocation.getY()] == GridContent.WALL || 
+				pR.getGrid()[(int) futurefrankLocation.getX()][(int) futurefrankLocation.getY()] == GridContent.CAMERA ||
+				pR.getGrid()[(int) futurefrankLocation.getX()][(int) futurefrankLocation.getY()] == GridContent.CONTROLPANEL ) {
 			futurefrankLocation = previousLocation;
 		}		
 		setFrankVelocity(futurefrankVelocity);
@@ -83,6 +90,10 @@ public class Frank {
 			}
 	}
 		return false;
+	}
+	
+	public void drawYourself(PlayRoom pR) {
+		pR.getGameview().getGridViews()[(int) frankLocation.getX()][(int) frankLocation.getY()].setImage(frank);
 	}
 		
 	/**

@@ -26,7 +26,11 @@ public class PlayButton extends Button {
 			frame.getChildren().add(model.getPlayState().getPr());
 			model.getMain().setScene(new Scene(frame));
 			
-			playstate.initialize(); 
+			try {
+				playstate.initialize();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} 
 			playstate.update();
 			playstate.keyIntake();
 		});

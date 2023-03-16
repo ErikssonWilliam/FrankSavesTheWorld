@@ -34,7 +34,7 @@ public class PlayState{
 		this.model = model;
 	}
 
-	public void initialize() {
+	public void initialize() throws FileNotFoundException {
 		int index;
 		if (!pr.getIsSecondLevel()) {
 			index = 0;

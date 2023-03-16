@@ -1,8 +1,10 @@
 package myLogics;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import javafx.geometry.Point2D;
+import javafx.scene.image.Image;
 import myLogics.PlayRoom.Directions;
 import myLogics.PlayRoom.GridContent;
 
@@ -23,8 +25,13 @@ public class Enemy {
 	private String type;
 	private ArrayList<Point2D> flashLight;
 	private ArrayList<Point2D> oldFlashLight;
+	private Boolean isStunned = false;
+	private int stunTime;
+	private long stunClock;
+	private Image enemyView;
 
-	public Enemy(Point2D startLocation, Directions direction, int steps, PlayRoom pr, String type) {
+
+	public Enemy(Point2D startLocation, Directions direction, int steps, PlayRoom pr, String type) throws FileNotFoundException {
 		this.enemyLocation = startLocation;
 		this.startLocation = startLocation;
 		this.enemyDirection = direction;
@@ -34,6 +41,8 @@ public class Enemy {
 		this.type = type;
 		this.flashLight = new ArrayList<Point2D>();
 		this.oldFlashLight = new ArrayList<Point2D>();
+		this.enemyView = new Image(
+				new FileInputStream("/home/wiler441/Documents/tdde10_project/Frank_Pictures/soldierdiscover1.png"));
 	}
 
 	/**
@@ -42,6 +51,7 @@ public class Enemy {
 	 * the opposite direction for the same amount of steps and so on 
 	 */
 	public void moveEnemy() {
+		
 		if (stepCount == steps) {
 			enemyDirection = opposite(enemyDirection);
 			stepCount = 0;
@@ -67,6 +77,9 @@ public class Enemy {
 		}
 	}
 
+	public void drawYourself() {
+		pr.getGameview().getGridViews()[(int) enemyLocation.getX()][(int) enemyLocation.getY()].setImage(enemyView);
+	}
 	/**
 	 * Continuously creates a deadly flashlight for the said enemy
 	 * @param enemyLocation
@@ -76,8 +89,8 @@ public class Enemy {
 
 		removePreviousFlash(oldFlashLight);
 
-
-		if (!pr.isActiveEMP()) {
+		if (!isStunned) {
+			
 			for (int i = 0; i < 3; i++) {
 				if (enemyDirection == Directions.WEST) {
 					flashLight.add(i, enemyLocation.add(0, -i - 1));
@@ -95,7 +108,14 @@ public class Enemy {
 			}
 		}
 		oldFlashLight = flashLight;
+
+		if (isStunned) {
+			if (stunClock + stunTime < System.nanoTime() / 1000000000) {
+				isStunned = false;
+			}
+		}
 	}
+	
 
 	/**
 	 * Removes the previous flashlight
@@ -159,5 +179,11 @@ public class Enemy {
 
 	public void setEnemyLocation(Point2D enemyLocation) {
 		this.enemyLocation = enemyLocation;
+	}
+
+	public void stunEnemy(Boolean isStunned, int time) {
+		this.stunTime = time;
+		this.stunClock = System.nanoTime()/1000000000;
+		this.isStunned = isStunned;
 	}
 }
