@@ -69,7 +69,7 @@ public class Frank {
 	/**
 	 * Handles the emp-usage
 	 */
-	public void useEmp() {
+	public void use() {
 		for (int i = 0; i < items.size(); i++) {
 			if (items.get(i) instanceof EMP) {
 				items.get(i).use();

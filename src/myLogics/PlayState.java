@@ -94,7 +94,7 @@ public class PlayState{
 		} else if (key.getCode() == KeyCode.E) {
 			pr.giveFrank();
 		} else if (key.getCode() == KeyCode.U) {
-			pr.getFrank().useEmp();
+			pr.getFrank().use();
 		}
 	}
 
